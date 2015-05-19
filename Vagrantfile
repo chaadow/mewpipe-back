@@ -10,15 +10,19 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  # Box to retrieve is Precise 32 : Ubuntu precise 32 VirtualBox
+    config.vm.box       = 'precise32'
 
+    # Box url
+    config.vm.box_url   = 'http://files.vagrantup.com/precise32.box'
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
 
+
+  # Host name
+  config.vm.host_name = 'mewpipe'
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
@@ -26,7 +30,7 @@ Vagrant.configure(2) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "10.11.12.13"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -47,6 +51,7 @@ Vagrant.configure(2) do |config|
 
     # Customize the amount of memory on the VM:
     vb.memory = "2048"
+    vb.cpus = 4
   end
   #
   # View the documentation for the provider you are using for more
@@ -59,36 +64,7 @@ Vagrant.configure(2) do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
-
-    chef.add_recipe "apt"
-    chef.add_recipe "nodejs"
-    chef.add_recipe "ruby_build"
-    chef.add_recipe "rbenv::user"
-    chef.add_recipe "rbenv::vagrant"
-    chef.add_recipe "vim"
-    chef.add_recipe "mysql::server"
-    chef.add_recipe "mysql::client"
-
-    # Install Ruby 2.2.1 and Bundler
-    # Set an empty root password for MySQL to make things simple
-    chef.json = {
-      rbenv: {
-        user_installs: [{
-          user: 'vagrant',
-          rubies: ["2.2.1"],
-          global: "2.2.1",
-          gems: {
-            "2.2.1" => [
-              { name: "bundler" }
-            ]
-          }
-        }]
-      },
-      mysql: {
-        server_root_password: ''
-      }
-    }
-  end
+  config.vm.provision :puppet,
+    :manifests_path => 'puppet/manifests',
+    :module_path => 'puppet/modules'
 end
