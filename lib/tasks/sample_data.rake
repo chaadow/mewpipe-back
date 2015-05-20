@@ -1,7 +1,7 @@
 if Rails.env.development?
 
   require 'factory_girl'
-  load 'spec/factories/factories.rb'
+  # load 'spec/factories/factories.rb'
 
   # Initialization
   namespace :db do
