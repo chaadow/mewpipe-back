@@ -17,6 +17,8 @@ gem "versionist"
 gem 'active_hash_relation', github: 'kollegorna/active_hash_relation'
 gem 'devise', '~> 3.4.1'
 
+gem 'rack-cors', :require => 'rack/cors'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

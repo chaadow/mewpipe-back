@@ -22,5 +22,4 @@ class V1::SessionsController < V1::BaseController
       render json: {error: t('sessions_controller.invalid_login_attempt')}, status: :unprocessable_entity
     end
 
-  end
 end

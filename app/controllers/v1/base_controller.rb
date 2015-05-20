@@ -43,5 +43,3 @@ class V1::BaseController < ApplicationController
     render json: {error: t('unauthorized')}, status: 401  # Authentication timeout
   end
 end
-
-end
