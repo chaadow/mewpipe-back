@@ -17,7 +17,14 @@ gem "versionist"
 gem 'active_hash_relation', github: 'kollegorna/active_hash_relation'
 gem 'devise', '~> 3.4.1'
 
+gem 'pundit'
+
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'kaminari', '~> 0.16.1'
+
+gem 'redis-throttle', git: 'git://github.com/andreareginato/redis-throttle.git'
+gem 'rspec-api_helpers', github: 'kollegorna/rspec-api_helpers'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

@@ -1,6 +1,6 @@
 class V1::SessionSerializer < ActiveModel::Serializer
 
-    attributes :email, :token_type, :user_id, :auth_token
+    attributes :email, :token_type, :user_id, :token, :admin
 
     def user_id
       object.id
@@ -8,6 +8,10 @@ class V1::SessionSerializer < ActiveModel::Serializer
 
     def token_type
       'Bearer'
+    end
+
+    def token
+      object.auth_token
     end
 
 end
