@@ -22,12 +22,7 @@ class V1::UsersController < V1::BaseController
     )
   end
 
-  def show
-    user = User.find(params[:id])
-    authorize user
 
-    render(json: V1::UserSerializer.new(user).to_json)
-  end
 
   def create
     user = User.new(create_params)
