@@ -12,9 +12,7 @@ class V1::BaseController < ApplicationController
 
 protected
 
-def destroy_session
-  request.session_options[:skip] = true
-end
+
 
 def unauthenticated!
   response.headers['WWW-Authenticate'] = "Token realm=Application"
