@@ -3,12 +3,15 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :validatable
 
-
+  # Validations
   validates :username, presence: true
   validates :email, presence: true
 
+  # Callbacks
   before_create :set_auth_token
 
+
+  # Private methods
   private
     def set_auth_token
       return if auth_token.present?
