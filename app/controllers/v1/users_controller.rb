@@ -34,12 +34,12 @@ class V1::UsersController < V1::BaseController
     return api_error(status: 422, errors: user.errors) unless user.valid?
 
     user.save!
-    user.activate
+    #user.activate
 
     render(
       json: V1::UserSerializer.new(user).to_json,
       status: 201,
-      location: api_v1_user_path(user.id)
+      location: v1_user_path(user.id)
     )
   end
 

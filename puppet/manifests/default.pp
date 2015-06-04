@@ -108,7 +108,7 @@ package { 'imagemagick':
 
 # Download GPG keys for RVM
 exec { 'dl_gpg_keys':
-  command => "${as_vagrant} 'gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3'"
+  command => "${as_vagrant} 'curl -sSL https://rvm.io/mpapis.asc | gpg --import -'"
 }
 
 # Install RVM
