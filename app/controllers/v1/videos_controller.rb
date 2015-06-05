@@ -2,6 +2,8 @@ class V1::VideosController < V1::BaseController
 
   before_action :find_video, [:show, :edit, :update, :destroy]
 
+  include ActiveHashRelation
+  
   def index
     videos = Video.all
 
