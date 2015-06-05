@@ -13,7 +13,7 @@ threads threads_count, threads_count
 preload_app!
 
 rackup DefaultRackup
-port 3000
+port 5000
 
 on_worker_boot do
   # Worker specific setup for Rails 4.1+
