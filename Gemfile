@@ -38,6 +38,8 @@ gem 'rspec-api_helpers', github: 'kollegorna/rspec-api_helpers'
 
 gem 'active_model_serializers', '0.9.2'
 
+gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+
 group :development do
 
   gem 'annotate', branch: 'develop'
