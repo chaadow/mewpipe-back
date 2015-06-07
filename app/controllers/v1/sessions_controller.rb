@@ -4,7 +4,7 @@ class V1::SessionsController < V1::BaseController
 
     # POST /v1/login
     def create
-      @user = User.find_for_database_authentication(email: params[:username])
+      @user = User.find_for_database_authentication(email: params[:email])
       return invalid_login_attempt unless @user
 
       if @user.valid_password?(params[:password])
