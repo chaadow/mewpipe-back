@@ -137,7 +137,7 @@ exec { 'install_bundler':
 
 # Install project gems
 exec { 'bundle_update':
-  command => "${as_vagrant} 'bundle update'",
+  command => "${as_vagrant} 'bundle'",
   cwd => "${mewpipe}",
   timeout => 600,
   require => [ Exec['install_bundler'], Package['git-core'] ]
