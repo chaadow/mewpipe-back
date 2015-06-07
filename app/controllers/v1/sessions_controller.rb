@@ -9,7 +9,7 @@ class V1::SessionsController < V1::BaseController
 
       if @user.valid_password?(params[:password])
         sign_in :user, @user
-        render json: @user, serializer: SessionSerializer, root: nil
+        render json: @user, serializer: V1::SessionSerializer, root: nil
       else
         invalid_login_attempt
       end
