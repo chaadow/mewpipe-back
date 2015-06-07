@@ -31,7 +31,7 @@ class V1::UsersController < V1::BaseController
 
   def create
 
-    avatar = params[:user][:avatar]
+    avatar = params[:avatar]
 
     # the avatar parameter needs to be converted to a
     # hash that paperclip understands as:
