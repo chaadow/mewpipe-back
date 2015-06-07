@@ -32,21 +32,21 @@ class V1::UsersController < V1::BaseController
   def create
 
     avatar = params[:avatar]
-
+    # binding.pry
     # the avatar parameter needs to be converted to a
     # hash that paperclip understands as:
     user = User.new(create_params)
-    if avatar
-      attachment = {
-          :filename => avatar[:filename],
-          :type => avatar[:type],
-          :headers => avatar[:head],
-          :tempfile => avatar[:tempfile]
-      }
-      user.avatar = ActionDispatch::Http::UploadedFile.new(attachment)
-
-      user.avatar_path = attachment[:filename] if avatar
-    end
+    # if avatar
+    #   attachment = {
+    #       :filename => avatar[:filename],
+    #       :type => avatar[:type],
+    #       :headers => avatar[:head],
+    #       :tempfile => avatar[:tempfile]
+    #   }
+    #   user.avatar = ActionDispatch::Http::UploadedFile.new(attachment)
+    #
+    #   user.avatar_path = attachment[:filename] if avatar
+    # end
 
 
 
