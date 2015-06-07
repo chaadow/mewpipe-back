@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   before_create :set_auth_token
 
 
-  has_attached_file :avatar, :path => ":rails_root/public/avatars/:id/:filename"
+  has_attached_file :avatar
   validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
   # Private methods

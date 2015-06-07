@@ -18,3 +18,4 @@
 .vagrant.*
 .idea/
 /public/avatars/*
+public/system
