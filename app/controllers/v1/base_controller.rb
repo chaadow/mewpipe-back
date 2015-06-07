@@ -1,7 +1,7 @@
 class V1::BaseController < ApplicationController
   include Pundit
 
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found!
   rescue_from Pundit::NotAuthorizedError, with: :unauthorized!
 
   before_action :destroy_session
