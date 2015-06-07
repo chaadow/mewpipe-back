@@ -24,13 +24,31 @@ class V1::UsersController < V1::BaseController
 
   def show
     user = User.find(params[:id])
-    authorize user
+    # authorize user
 
     render(json: V1::UserSerializer.new(user).to_json)
   end
 
   def create
+
+    avatar = params[:user][:avatar]
+
+    # the avatar parameter needs to be converted to a
+    # hash that paperclip understands as:
+    if avatar
+      attachment = {
+          :filename => avatar[:filename],
+          :type => avatar[:type],
+          :headers => avatar[:head],
+          :tempfile => avatar[:tempfile]
+      }
+    end
+
+
     user = User.new(create_params)
+    user.avatar = ActionDispatch::Http::UploadedFile.new(attachment)
+
+    user.avatar_path = attachment[:filename] if avatar
     return api_error(status: 422, errors: user.errors) unless user.valid?
 
     user.save!
@@ -73,8 +91,8 @@ class V1::UsersController < V1::BaseController
   private
 
   def create_params
-    params.require(:user).permit(
-      :email, :password, :password_confirmation, :username
+    params.permit(
+      :email, :password, :password_confirmation, :firstname, :lastname, :avatar
     ).delete_if{ |k,v| v.nil?}
   end
   def update_params

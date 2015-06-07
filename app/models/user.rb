@@ -4,11 +4,12 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :validatable
 
   # Validations
-  validates :username, presence: true
   validates :email, presence: true
 
   # Callbacks
   before_create :set_auth_token
+
+  has_attached_file :avatar, :path => ":rails_root/public/avatars/:filename"
 
 
   # Private methods
