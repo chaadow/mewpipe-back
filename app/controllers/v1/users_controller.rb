@@ -35,6 +35,7 @@ class V1::UsersController < V1::BaseController
 
     # the avatar parameter needs to be converted to a
     # hash that paperclip understands as:
+    user = User.new(create_params)
     if avatar
       attachment = {
           :filename => avatar[:filename],
@@ -42,13 +43,14 @@ class V1::UsersController < V1::BaseController
           :headers => avatar[:head],
           :tempfile => avatar[:tempfile]
       }
+      user.avatar = ActionDispatch::Http::UploadedFile.new(attachment)
+
+      user.avatar_path = attachment[:filename] if avatar
     end
 
 
-    user = User.new(create_params)
-    user.avatar = ActionDispatch::Http::UploadedFile.new(attachment)
 
-    user.avatar_path = attachment[:filename] if avatar
+
     return api_error(status: 422, errors: user.errors) unless user.valid?
 
     user.save!
