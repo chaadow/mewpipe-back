@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.mewpipe.com; version=1"}, :path => {:value => "v1"}, :defaults => {:format => "json"}, :default => true) do
     resources :users
     resources :videos
-    match 'videos/upload', to: 'videos#upload', via: [:get]
+    match 'videos/upload', to: 'videos#upload', via: [:post]
     resource :login, only: [:create], controller: :sessions
     end
   end

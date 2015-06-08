@@ -6,6 +6,12 @@ class Video < ActiveRecord::Base
   # Associations
   belongs_to :user
 
-  has_attached_file :file, :path => ":rails_root/public/files/:filename"
+  has_attached_file :file
 
+  # Validations
+  validates :title, :description, presence: true
+
+  validates_attachment :file, :presence => true,
+                       :content_type => { :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]},
+                       :size => { :in => 0..500.megabytes }
 end

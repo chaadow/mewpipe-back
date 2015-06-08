@@ -1,12 +1,16 @@
 class V1::VideosController < V1::BaseController
 
-  before_action :find_video, [:show, :edit, :update, :destroy]
+  before_action :find_video, only: [:show, :edit, :update, :destroy]
 
   include ActiveHashRelation
 
   def index
     videos = Video.all
+
+    videos = apply_filters(videos, params)
+
     videos = paginate(videos)
+
     render(
     json: ActiveModel::ArraySerializer.new(
       videos,
@@ -20,7 +24,7 @@ class V1::VideosController < V1::BaseController
   def show
     video = Video.find(params[:id])
 
-    render(json: V1::UserSerializer.new(video).to_json)
+    render(json: V1::VideoSerializer.new(video).to_json)
   end
 
   def new
@@ -28,31 +32,14 @@ class V1::VideosController < V1::BaseController
   end
 
   def upload
-    file = params[:file]
-
-    attachment = {
-        :filename => file[:filename],
-        :type => file[:type],
-        :headers => file[:head],
-        :tempfile => file[:tempfile]
-    }
-
-    video = Video.new
-
-    video.file = ActionDispatch::Http::UploadedFile.new(attachment)
-
-    video.file_path = attachment[:filename]
-
-    video.title = params[:file]
-    video.description = params[:description]
-    video.confidentiality = params[:confidentiality]
-
+    video = Video.new(video_params)
+    return api_error(status: 422, errors: video.errors) unless video.valid?
     video.save!
 
     render(
       json: V1::VideoSerializer.new(video).to_json,
       status: 201,
-      location: api_v1_video_path(video.id)
+      location: v1_video_path(video.id)
     )
   end
 
@@ -97,7 +84,7 @@ class V1::VideosController < V1::BaseController
   private
 
   def video_params
-    params.require(:video).permit(:title, :description, :confidentiality, :file, :user_id)
+    params.permit(:title, :description, :confidentiality, :file, :user_id)
   end
 
   def find_video
