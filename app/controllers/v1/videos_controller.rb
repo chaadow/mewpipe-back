@@ -84,7 +84,7 @@ class V1::VideosController < V1::BaseController
   private
 
   def video_params
-    params.permit(:title, :description, :confidentiality, :file, :user_id)
+    params.permit(:title, :description, :confidentiality, :file, :user_id, :tag_list)
   end
 
   def find_video

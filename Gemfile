@@ -44,6 +44,8 @@ gem 'paperclip-av-transcoder'
 
 # gem 'paperclip-av-qtfaststart'
 
+gem 'acts-as-taggable-on', '~> 3.4'
+
 group :development do
 
   gem 'annotate', branch: 'develop'
