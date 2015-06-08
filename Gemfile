@@ -42,6 +42,8 @@ gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 
 gem 'paperclip-av-transcoder'
 
+# gem 'paperclip-av-qtfaststart'
+
 group :development do
 
   gem 'annotate', branch: 'develop'

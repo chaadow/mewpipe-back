@@ -8,6 +8,8 @@ class Video < ActiveRecord::Base
 
   has_attached_file :file, :styles => {
     :medium => { :geometry => "640x480", :format => 'flv' },
+    :mp4 => { :geometry => "400x300", :format => 'mp4'},
+
     :thumb => { :geometry => "100x100#", :format => 'jpg', :time => 10 }
   }, :processors => [:transcoder]
 
@@ -15,6 +17,6 @@ class Video < ActiveRecord::Base
   validates :title,  presence: true
 
   validates_attachment :file, :presence => true,
-                       :content_type => { :content_type => ["video/mp4", "video/x-flv", "image/jpg", "image/jpeg", "image/png", "image/gif"]},
+                       :content_type => { :content_type => ["video/mp4", "video/x-flv"]},
                        :size => { :in => 0..500.megabytes }
 end
