@@ -40,6 +40,8 @@ gem 'active_model_serializers', '0.9.2'
 
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 
+gem 'paperclip-av-transcoder'
+
 group :development do
 
   gem 'annotate', branch: 'develop'
