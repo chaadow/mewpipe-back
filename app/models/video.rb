@@ -12,7 +12,7 @@ class Video < ActiveRecord::Base
   }, :processors => [:transcoder]
 
   # Validations
-  validates :title, :description, presence: true
+  validates :title,  presence: true
 
   validates_attachment :file, :presence => true,
                        :content_type => { :content_type => ["video/mp4", "video/x-flv", "image/jpg", "image/jpeg", "image/png", "image/gif"]},
