@@ -81,6 +81,22 @@ class V1::VideosController < V1::BaseController
     head status: 204
   end
 
+  def increment_view
+    video = Video.find(params[:id])
+    unless video.increment!(:view_count)
+      api_error(status:422, errors: "The view can not be incremented")
+    end
+
+    render(
+      json: {count: video.view_count},
+      status: 200,
+      location: v1_video_path(video.id),
+      serializer: V1::VideoSerializer
+    )
+
+
+  end
+
 
   private
 

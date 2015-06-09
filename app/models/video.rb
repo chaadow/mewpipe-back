@@ -15,7 +15,10 @@ class Video < ActiveRecord::Base
   belongs_to :user
 
   has_attached_file :file, :styles => {
-    :mp4 => { :geometry => "400x300", :format => 'mp4'},
+    :mp4 => { :geometry => "640x480", :format => 'mp4'},
+    :ogg => { :geometry => "640x480#", :format => 'ogg'},
+    :webm => { :geometry => "640x480#", :format => 'webm'},
+
     :thumb => { :geometry => "300x300#", :format => 'jpg', :time => 10 },
     :poster => { :geometry => "1000x750", :format => 'jpg', :time => 10 }
   }, :processors => [:transcoder]
@@ -24,6 +27,6 @@ class Video < ActiveRecord::Base
   validates :title,  presence: true
 
   validates_attachment :file, :presence => true,
-                       :content_type => { :content_type => ["video/mp4", "video/x-flv"]},
+                       :content_type => { :content_type => ["video/mp4", "video/x-flv", "video/ogg", "video/webm"]},
                        :size => { :in => 0..500.megabytes }
 end
