@@ -3,9 +3,9 @@ class Video < ActiveRecord::Base
   # Scopes
   scope :recent, -> { order('created_at DESC') }
 
-  scope :listed, -> { where(confidentiality: "public")}
-  scope :unlisted, -> { where(confidentiality: "unlisted")}
-  scope :personal, -> { where(confidentiality: "personal")}
+  scope :listed, -> { where("lower(confidentiality) = ?", "public")}
+  scope :unlisted, -> { where("lower(confidentiality) = ?", "privatelink")}
+  scope :personal, -> { where("lower(confidentiality) = ?", "private") }
 
 
   # Add tags

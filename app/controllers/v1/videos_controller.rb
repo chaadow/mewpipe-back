@@ -58,10 +58,11 @@ class V1::VideosController < V1::BaseController
 
   def update
     video = Video.find(params[:id])
-    if video.update(video_params)
-      redirect_to video
-    else
-      render 'edit'
+    # user = User.find(params[:user_id])
+    # authorize user
+
+    unless video.update_attributes(update_params)
+      return api_error(status: 422, errors: video.errors)
     end
 
     render(
@@ -85,6 +86,10 @@ class V1::VideosController < V1::BaseController
 
   def video_params
     params.permit(:title, :description, :confidentiality, :file, :user_id, :tag_list)
+  end
+
+  def update_params
+    video_params
   end
 
   def find_video
