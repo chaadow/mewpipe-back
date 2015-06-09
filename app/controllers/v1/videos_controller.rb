@@ -68,7 +68,7 @@ class V1::VideosController < V1::BaseController
     render(
       json: V1::VideoSerializer.new(video).to_json,
       status: 200,
-      location: _v1_video_path(video.id),
+      location: v1_video_path(video.id),
       serializer: V1::VideoSerializer
     )
   end
