@@ -10,5 +10,9 @@ class V1::VideoSerializer < V1::BaseSerializer
   def mp4
     object.file.url(:mp4)
   end
+
+  def file_meta
+    JSON.parse((eval(object.file_meta)).to_json )
+  end
   # belongs_to :user
 end

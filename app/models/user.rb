@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   # Callbacks
   before_create :set_auth_token
 
+  has_many :videos, dependent: :destroy
+
 
   has_attached_file :avatar,
     :styles => { :thumbnail => "150x150#" }

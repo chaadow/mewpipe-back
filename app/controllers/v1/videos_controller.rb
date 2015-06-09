@@ -5,7 +5,7 @@ class V1::VideosController < V1::BaseController
   include ActiveHashRelation
 
   def index
-    videos = Video.all
+    videos = Video.listed
 
     videos = apply_filters(videos, params)
 

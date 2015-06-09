@@ -3,6 +3,12 @@ class Video < ActiveRecord::Base
   # Scopes
   scope :recent, -> { order('created_at DESC') }
 
+  scope :listed, -> { where(confidentiality: "public")}
+  scope :unlisted, -> { where(confidentiality: "unlisted")}
+  scope :personal, -> { where(confidentiality: "personal")}
+
+
+  # Add tags
   acts_as_taggable
 
   # Associations

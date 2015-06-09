@@ -83,6 +83,9 @@ package { 'build-essential':
 package { 'git-core':
   ensure => installed
 }
+package { 'postgresql-contrib':
+  ensure => installed
+}
 
 # Nokogiri dependencies.
 package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
