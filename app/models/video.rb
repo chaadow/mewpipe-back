@@ -11,7 +11,7 @@ class Video < ActiveRecord::Base
   has_attached_file :file, :styles => {
     :mp4 => { :geometry => "400x300", :format => 'mp4'},
     :thumb => { :geometry => "300x300#", :format => 'jpg', :time => 10 },
-    :poster => { :geometry => "1000*750", :format => 'jpg', :time => 10}
+    :poster => { :geometry => "1000x750", :format => 'jpg', :time => 10 }
   }, :processors => [:transcoder]
 
   # Validations
