@@ -1,7 +1,7 @@
 class V1::UserSerializer < V1::BaseSerializer
   attributes :id, :email, :firstname, :lastname, :admin, :created_at, :updated_at, :avatar
 
-  has_many :videos, serializer: VideoSerializer
+  has_many :videos, serializer: V1::VideoSerializer
 
 
   def include_associations!

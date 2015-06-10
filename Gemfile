@@ -38,7 +38,9 @@ gem 'rspec-api_helpers', github: 'kollegorna/rspec-api_helpers'
 # gem 'capistrano-rails', group: :development
 
 
-gem 'active_model_serializers', '0.9.2'
+# gem 'active_model_serializers', '0.9.2'
+ gem 'active_model_serializers'
+
 
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 
