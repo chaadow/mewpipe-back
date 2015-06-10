@@ -84,7 +84,7 @@ def jsonapi_format(errors)
   errors.messages.each do |attribute, error|
     array_hash = []
     error.each do |e|
-      array_hash << {attribute: attribute, message: e}
+      array_hash << {message: "#{attribute} #{e}"}
     end
     errors_hash.merge!({ attribute => array_hash })
   end

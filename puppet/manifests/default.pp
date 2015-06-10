@@ -88,9 +88,10 @@ package { 'postgresql-contrib':
 }
 
 # Nokogiri dependencies.
-package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
-  ensure => installed
-}
+  package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
+    ensure => installed
+  }
+
 
 # ExecJS runtime.
 package { 'nodejs':
@@ -106,6 +107,29 @@ package { 'openjdk-6-jre':
 package { 'imagemagick':
   ensure => installed
 }
+
+#--- FFMPEG --------------------------
+  package { ['software-properties-common', 'python-software-properties']:
+    ensure => installed
+  }
+
+  exec { 'add_fmmpeg_repo':
+    command => "sudo add-apt-repository ppa:samrog131/ppa",
+    require => [ Package['software-properties-common'], Package['python-software-properties'] ]
+  }
+
+  exec {'apt_get_update_again':
+    command => 'sudo apt-get update',
+    require => [Exec['add_fmmpeg_repo']]
+
+  }
+
+  package { 'ffmpeg':
+    ensure => installed,
+    require => [Exec['apt_get_update_again']]
+  }
+
+
 
 # --- Ruby ---------------------------------------------------------------------
 
