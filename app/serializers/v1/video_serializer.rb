@@ -8,13 +8,14 @@ class V1::VideoSerializer < V1::BaseSerializer
     object.file.url(:thumb)
   end
   def mp4
-    object.file.url(:mp4)
+
+    object.file_content_type == "video/mp4" ? object.file : object.file.url(:mp4)
   end
   def ogg
-    object.file.url(:ogg)
+    object.file_content_type == "video/ogg" ? object.file : object.file.url(:ogg)
   end
   def webm
-    object.file.url(:webm)
+    object.file_content_type == "video/webm" ? object.file : object.file.url(:webm)
   end
 
   def file_meta
