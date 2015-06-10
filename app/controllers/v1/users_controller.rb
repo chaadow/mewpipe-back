@@ -60,7 +60,7 @@ class V1::UsersController < V1::BaseController
 
   def destroy
     user = User.find(params[:id])
-    authorize user
+    # authorize user
 
     if !user.destroy
       return api_error(status: 500)
