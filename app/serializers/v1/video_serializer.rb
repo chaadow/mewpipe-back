@@ -1,15 +1,18 @@
 class V1::VideoSerializer < V1::BaseSerializer
   attributes :id, :title, :description, :confidentiality, :thumb,
              :mp4, :file, :file_meta, :created_at, :updated_at,
-             :tag_list, :ogg, :webm, :view_count, :slug, :small
+             :tag_list, :ogg, :webm, :view_count, :slug, :small, :poster
 
-  # belongs_to :user
+  belongs_to :user
 
   def thumb
     object.file.url(:thumb)
   end
   def small
     object.file.url(:small)
+  end
+  def poster
+    object.file.url(:poster)
   end
   def mp4
 

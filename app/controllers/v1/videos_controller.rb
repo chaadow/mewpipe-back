@@ -11,12 +11,12 @@ class V1::VideosController < V1::BaseController
     videos = paginate(videos)
 
     render(
-    json: ActiveModel::ArraySerializer.new(
+    json:
       videos,
       each_serializer: V1::VideoSerializer,
       root: 'videos',
       meta: meta_attributes(videos)
-      )
+
     )
   end
 
@@ -24,7 +24,7 @@ class V1::VideosController < V1::BaseController
     video = Video.friendly.find(params[:id])
 
 
-    render(json: V1::VideoSerializer.new(video).to_json)
+    render(json: video, root: "video", serializer: V1::VideoSerializer)
   end
 
   def new
@@ -37,7 +37,7 @@ class V1::VideosController < V1::BaseController
     video.save!
 
     render(
-      json: V1::VideoSerializer.new(video).to_json,
+      json: video, serializer: V1::VideoSerializer,
       status: 201,
       location: v1_video_path(video.id)
     )
@@ -66,7 +66,7 @@ class V1::VideosController < V1::BaseController
     end
 
     render(
-      json: V1::VideoSerializer.new(video).to_json,
+      json:  video, serializer: V1::VideoSerializer,
       status: 200,
       location: v1_video_path(video.id),
       serializer: V1::VideoSerializer

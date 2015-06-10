@@ -23,6 +23,13 @@ GIT
     rspec-api_helpers (0.0.1)
 
 GIT
+  remote: git://github.com/rails-api/active_model_serializers.git
+  revision: 7b0a85fdda8563cd0a3f86c62387e3fe7ef5e45e
+  specs:
+    active_model_serializers (0.10.0.rc1)
+      activemodel (>= 4.0)
+
+GIT
   remote: git://github.com/thoughtbot/paperclip.git
   revision: 14356d7eccb9175819508d243fb4a92681d11208
   specs:
@@ -55,8 +62,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.1)
-    active_model_serializers (0.9.3)
-      activemodel (>= 3.2)
     activejob (4.2.1)
       activesupport (= 4.2.1)
       globalid (>= 0.3.0)
@@ -238,7 +243,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_hash_relation!
-  active_model_serializers
+  active_model_serializers!
   acts-as-taggable-on (~> 3.4)
   annotate
   byebug

@@ -39,7 +39,7 @@ gem 'rspec-api_helpers', github: 'kollegorna/rspec-api_helpers'
 
 
 # gem 'active_model_serializers', '0.9.2'
- gem 'active_model_serializers'
+ gem 'active_model_serializers', github: "rails-api/active_model_serializers"
 
 
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"

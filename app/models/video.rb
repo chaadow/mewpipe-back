@@ -25,9 +25,9 @@ class Video < ActiveRecord::Base
     :thumb => { :geometry => "600x600#", :format => 'jpg', :time => 10 },
     :small => { :geometry => "242x137#", :format => 'jpg', :time => 10 },
     :poster => { :geometry => "1000x750", :format => 'jpg', :time => 10 }
-  }, :processors => [:transcoder]
+  }, :processors => [:transcoder], only_process: [:thumb, :small]
 
-  process_in_background :file, processing_image_url: :processing_image_fallback
+  process_in_background :file, processing_image_url: :processing_image_fallback, only_process: [:webm, :ogg, :mp4, :poster]
 
   def processing_image_fallback
     options = file.options

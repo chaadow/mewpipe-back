@@ -13,20 +13,20 @@ class V1::UsersController < V1::BaseController
     users = policy_scope(users)
 
     render(
-      json: ActiveModel::ArraySerializer.new(
+      json:
         users,
         each_serializer: V1::UserSerializer,
         root: 'users',
         meta: meta_attributes(users)
       )
-    )
+
   end
 
   def show
     user = User.find(params[:id])
     # authorize user
 
-    render(json: V1::UserSerializer.new(user).to_json)
+    render(json: user, root: "user", serializer: V1::UserSerializer)
   end
 
   def create
@@ -36,7 +36,7 @@ class V1::UsersController < V1::BaseController
     user.save!
     #user.activate
     render(
-      json: V1::UserSerializer.new(user).to_json,
+      json: user, root: "user", serializer: V1::UserSerializer,
       status: 201,
       location: v1_user_path(user.id)
     )
@@ -51,7 +51,7 @@ class V1::UsersController < V1::BaseController
     end
 
     render(
-      json: V1::UserSerializer.new(user).to_json,
+      json: user, root: "user", serializer: V1::UserSerializer,
       status: 200,
       location: v1_user_path(user.id),
       serializer: V1::UserSerializer
