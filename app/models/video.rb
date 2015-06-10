@@ -20,6 +20,7 @@ class Video < ActiveRecord::Base
     :webm => { :geometry => "640x480#", :format => 'webm'},
 
     :thumb => { :geometry => "300x300#", :format => 'jpg', :time => 10 },
+    :small => { :geometry => "242x137#", :format => 'jpg', :time => 10 },
     :poster => { :geometry => "1000x750", :format => 'jpg', :time => 10 }
   }, :processors => [:transcoder]
 

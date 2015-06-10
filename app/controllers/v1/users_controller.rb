@@ -44,7 +44,7 @@ class V1::UsersController < V1::BaseController
 
   def update
     user = User.find(params[:id])
-    authorize user
+    # authorize user
 
     if !user.update_attributes(update_params)
       return api_error(status: 422, errors: user.errors)
