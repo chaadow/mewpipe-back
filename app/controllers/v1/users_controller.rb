@@ -53,7 +53,7 @@ class V1::UsersController < V1::BaseController
     render(
       json: V1::UserSerializer.new(user).to_json,
       status: 200,
-      location: _v1_user_path(user.id),
+      location: v1_user_path(user.id),
       serializer: V1::UserSerializer
     )
   end
