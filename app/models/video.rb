@@ -1,5 +1,6 @@
 class Video < ActiveRecord::Base
 
+
   # Scopes
   scope :recent, -> { order('created_at DESC') }
 
@@ -8,6 +9,8 @@ class Video < ActiveRecord::Base
   scope :personal, -> { where("lower(confidentiality) = ?", "private") }
 
 
+  extend FriendlyId
+  friendly_id :title, use: :slugged
   # Add tags
   acts_as_taggable
 
@@ -19,10 +22,19 @@ class Video < ActiveRecord::Base
     :ogg => { :geometry => "640x480#", :format => 'ogg'},
     :webm => { :geometry => "640x480#", :format => 'webm'},
 
-    :thumb => { :geometry => "300x300#", :format => 'jpg', :time => 10 },
+    :thumb => { :geometry => "600x600#", :format => 'jpg', :time => 10 },
     :small => { :geometry => "242x137#", :format => 'jpg', :time => 10 },
     :poster => { :geometry => "1000x750", :format => 'jpg', :time => 10 }
   }, :processors => [:transcoder]
+
+  process_in_background :file, processing_image_url: :processing_image_fallback
+
+  def processing_image_fallback
+    options = file.options
+    options[:interpolator].interpolate(options[:url], file, :original)
+  end
+
+
 
   # Validations
   validates :title,  presence: true

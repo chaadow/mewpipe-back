@@ -23,6 +23,8 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'kaminari', '~> 0.16.1'
 
+gem 'friendly_id', '~> 5.1.0'
+
 gem 'redis-throttle', git: 'git://github.com/andreareginato/redis-throttle.git'
 gem 'rspec-api_helpers', github: 'kollegorna/rspec-api_helpers'
 
@@ -41,6 +43,9 @@ gem 'active_model_serializers', '0.9.2'
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 
 gem 'paperclip-av-transcoder'
+
+gem 'delayed_job_active_record'
+gem 'delayed_paperclip'
 
 # gem 'paperclip-av-qtfaststart'
 

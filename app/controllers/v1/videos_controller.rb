@@ -1,6 +1,5 @@
 class V1::VideosController < V1::BaseController
 
-  before_action :find_video, only: [:show, :edit, :update, :destroy]
 
   include ActiveHashRelation
 
@@ -22,7 +21,8 @@ class V1::VideosController < V1::BaseController
   end
 
   def show
-    video = Video.find(params[:id])
+    video = Video.friendly.find(params[:id])
+
 
     render(json: V1::VideoSerializer.new(video).to_json)
   end
@@ -108,7 +108,4 @@ class V1::VideosController < V1::BaseController
     video_params
   end
 
-  def find_video
-    video = Video.find(params[:id])
-  end
 end
