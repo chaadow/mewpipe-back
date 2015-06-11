@@ -1,10 +1,9 @@
 class V1::VideosController < V1::BaseController
 
-
   include ActiveHashRelation
 
   def index
-    videos = Video.listed
+    videos = Video.all
 
     videos = apply_filters(videos, params)
 
@@ -22,6 +21,7 @@ class V1::VideosController < V1::BaseController
 
   def show
     video = Video.friendly.find(params[:id])
+    impressionist(video)
 
 
     render(json: video, root: "video", serializer: V1::VideoSerializer)
@@ -68,8 +68,7 @@ class V1::VideosController < V1::BaseController
     render(
       json:  video, serializer: V1::VideoSerializer,
       status: 200,
-      location: v1_video_path(video.id),
-      serializer: V1::VideoSerializer
+      location: v1_video_path(video.id)
     )
   end
 
@@ -90,8 +89,7 @@ class V1::VideosController < V1::BaseController
     render(
       json: {count: video.view_count},
       status: 200,
-      location: v1_video_path(video.id),
-      serializer: V1::VideoSerializer
+      location: v1_video_path(video.id)
     )
 
 
@@ -101,7 +99,7 @@ class V1::VideosController < V1::BaseController
   private
 
   def video_params
-    params.permit(:title, :description, :confidentiality, :file, :user_id, :tag_list)
+    params.permit(:title, :description, :confidentiality, :file, :user_id, :tag_list, :property, :order)
   end
 
   def update_params
