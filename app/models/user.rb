@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
 
   has_attached_file :avatar,
     :styles => { :thumbnail => "150x150#" },
-    :default => "/user-icon.png"
+    :default_url => "/user-icon.png"
   validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
 
@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   def self.openid_optional_fields
     ["gender", "http://axschema.org/person/gender"]
   end
-  
+
   def openid_fields=(fields)
   fields.each do |key, value|
     # Some AX providers can return multiple values per key
