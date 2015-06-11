@@ -57,7 +57,7 @@ class V1::VideosController < V1::BaseController
   end
 
   def update
-    video = Video.find(params[:id])
+    video = Video.friendly.find(params[:id])
     # user = User.find(params[:user_id])
     # authorize user
 
@@ -81,7 +81,7 @@ class V1::VideosController < V1::BaseController
   end
 
   def increment_view
-    video = Video.find(params[:id])
+    video = Video.friendly.find(params[:id])
     unless video.increment!(:view_count)
       api_error(status:422, errors: "The view can not be incremented")
     end
