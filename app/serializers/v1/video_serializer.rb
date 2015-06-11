@@ -5,7 +5,7 @@ class V1::VideoSerializer < V1::BaseSerializer
              :page_views
 
 
-  belongs_to :user
+  belongs_to :user, serializer: V1::UserSerializer
 
   def page_views
     object.impressions_count

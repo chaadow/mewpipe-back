@@ -7,6 +7,8 @@ class V1::VideosController < V1::BaseController
 
     videos = apply_filters(videos, params)
 
+    videos = videos.tagged_with(params[:tag_list]) if params[:tag_list]
+
     videos = paginate(videos)
 
     render(
