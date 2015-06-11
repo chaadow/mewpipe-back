@@ -1,7 +1,7 @@
 class Video < ActiveRecord::Base
 
   # For page views
-  is_impressionable counter_cache: true, :unique => :ip_address
+  is_impressionable counter_cache: true, unique: :request_hash
 
   # Scopes
   scope :recent, -> { order('created_at DESC') }
