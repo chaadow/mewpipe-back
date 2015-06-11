@@ -8,7 +8,7 @@ class V1::VideoSerializer < V1::BaseSerializer
   belongs_to :user
 
   def page_views
-    object.impressionist_count
+    object.impressions_count
   end
   def thumb
     object.file.url(:thumb)
