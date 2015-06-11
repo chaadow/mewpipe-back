@@ -1,8 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :recoverable, :validatable,
-  :openid_authenticatable
+  devise :openid_authenticatable, :database_authenticatable, :recoverable, :validatable
 
   # Validations
   validates :email, :firstname, :lastname, presence: true
@@ -19,15 +18,16 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
 
-  OPEN ID
+  #OPEN ID
 
   def self.openid_required_fields
-  ["fullname", "email", "http://axschema.org/namePerson", "http://axschema.org/contact/email"]
-end
+    ["fullname", "email", "http://axschema.org/namePerson", "http://axschema.org/contact/email"]
+  end
 
-def self.openid_optional_fields
-  ["gender", "http://axschema.org/person/gender"]
-end
+  def self.openid_optional_fields
+    ["gender", "http://axschema.org/person/gender"]
+  end
+  
   def openid_fields=(fields)
   fields.each do |key, value|
     # Some AX providers can return multiple values per key
