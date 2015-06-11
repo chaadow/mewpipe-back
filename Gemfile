@@ -17,6 +17,8 @@ gem "versionist"
 gem 'active_hash_relation', github: 'kollegorna/active_hash_relation'
 gem 'devise', '~> 3.4.1'
 
+gem "devise_openid_authenticatable"
+
 gem 'pundit'
 
 gem 'rack-cors', :require => 'rack/cors'
