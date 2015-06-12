@@ -18,6 +18,8 @@ gem 'active_hash_relation', github: 'kollegorna/active_hash_relation'
 gem 'devise', '~> 3.4.1'
 
 gem "devise_openid_authenticatable"
+gem 'ruby-openid'
+gem 'open_id_authentication'
 
 gem 'pundit'
 
