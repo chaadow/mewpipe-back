@@ -14,7 +14,7 @@ class V1::SessionsController < V1::BaseController
             end
             sign_in user
           else
-            invalid_login_attempt
+            render json: "ERROR INSIDE OPEN ID"
           end
         end
       else
