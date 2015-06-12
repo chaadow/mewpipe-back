@@ -17,7 +17,7 @@ class V1::SessionsController < V1::BaseController
                @user.lastname = "LASTname openid"
                @user.email = registration['email']
                @user.save
-               @user.reload
+              #  @user.reload
                redirect_to "http://localhost:3000/#/redirect/#{@user.id}/#{@user.auth_token}"
                return false
              end
