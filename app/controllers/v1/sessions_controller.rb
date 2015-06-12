@@ -55,7 +55,7 @@ class V1::SessionsController < V1::BaseController
           if @user = User.find_or_initialize_by(identity_url: identity_url)
             if @user.new_record?
               assign_registration_attributes!(registration)
-
+              @user.password = "password"
               if @user.save
                 binding.pry
                 successful_login
