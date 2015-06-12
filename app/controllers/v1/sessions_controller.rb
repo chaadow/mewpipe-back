@@ -40,12 +40,12 @@ class V1::SessionsController < V1::BaseController
           failed_login "Sorry, the OpenID verification failed"
         when :successful
 
-
+          # binding.pry
           if @user = User.find_or_initialize_by(identity_url: identity_url)
             if @user.new_record?
               assign_registration_attributes!(registration)
 
-              assign_ax_attributes!(ax)
+              assign_ax_attributes!(ax) if ax
               @user.password = "password"
               if @user.save
                 # binding.pry
@@ -74,10 +74,7 @@ class V1::SessionsController < V1::BaseController
     def assign_ax_attributes!(ax)
       model_to_ax_mapping.each do |model_attribute, ax_attribute|
         unless ax[ax_attribute].blank?
-          # if ax[ax_attribute].is_a? Array
-          #   ax[ax_attribute] = ax[ax_attribute].first
-          # end
-          @user.send("#{model_attribute}=", ax[ax_attribute])
+          @user.send("#{model_attribute}=", ((ax[ax_attribute].is_a? Array) ? ax[ax_attribute].first : ax[ax_attribute] ))
         end
       end
     end
