@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :validatable
 
   # Validations
-  #validates :email, :firstname, :lastname, presence: true
+  validates :email, :username, presence: true
 
   # Callbacks
   before_create :set_auth_token

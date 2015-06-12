@@ -73,7 +73,7 @@ class V1::UsersController < V1::BaseController
 
   def create_params
     params.permit(
-      :email, :password, :password_confirmation, :firstname, :lastname, :avatar
+      :email, :password, :password_confirmation, :firstname, :lastname, :avatar, :username
     ).delete_if{ |k,v| v.nil?}
   end
   def update_params
