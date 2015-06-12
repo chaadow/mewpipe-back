@@ -27,8 +27,8 @@ class V1::SessionsController < V1::BaseController
   # Be sure to yield registration, a third argument in the
   # #authenticate_with_open_id block.
       authenticate_with_open_id(identity_url,
-          :required => [ :nickname, :email ],
-          :optional => :fullname) do |result, identity_url, registration|
+          :required => [ :nickname, :email,"http://axschema.org/contact/email", "http://axschema.org/namePerson/friendly" ],
+          :optional => :fullname) do |result, identity_url, registration, ax|
         case result.status
         when :missing
           failed_login "Sorry, the OpenID server couldn't be found"
@@ -39,22 +39,13 @@ class V1::SessionsController < V1::BaseController
         when :failed
           failed_login "Sorry, the OpenID verification failed"
         when :successful
-          # @user = User.find_or_initialize_by(identity_url: identity_url)
-          #  if @user.new_record?
-          #    @user.username = registration['nickname']
-          #    @user.email = registration['email']
-          #    @user.save
-          #   #  @user.reload
-          #    redirect_to "http://localhost:3000/#/redirect/#{@user.id}/#{@user.auth_token}"
-          #    return false
-          #  end
-          #   redirect_to "http://localhost:3000/#/error"
-          # return
-          # render json: user, serializer: V1::SessionSerializer, root: "session"
+
 
           if @user = User.find_or_initialize_by(identity_url: identity_url)
             if @user.new_record?
               assign_registration_attributes!(registration)
+
+              assign_ax_attributes!(ax)
               @user.password = "password"
               if @user.save
                 # binding.pry
@@ -80,9 +71,22 @@ class V1::SessionsController < V1::BaseController
         end
       end
     end
+    def assign_ax_attributes!(ax)
+      model_to_ax_mapping.each do |model_attribute, ax_attribute|
+        unless ax[ax_attribute].blank?
+          if ax[ax_attribute].is_a? Array
+            ax[ax_attribute] = ax[ax_attribute].first
+          end
+          @user.send("#{model_attribute}=", ax[ax_attribute])
+        end
+      end
+    end
 
     def model_to_registration_mapping
       { :username => 'nickname', :email => 'email', :firstname => 'fullname' }
+    end
+    def model_to_ax_mapping
+      { :username => 'http://axschema.org/namePerson/friendly', :email => 'http://axschema.org/contact/email' }
     end
 
     def successful_login
