@@ -74,9 +74,9 @@ class V1::SessionsController < V1::BaseController
     def assign_ax_attributes!(ax)
       model_to_ax_mapping.each do |model_attribute, ax_attribute|
         unless ax[ax_attribute].blank?
-          if ax[ax_attribute].is_a? Array
-            ax[ax_attribute] = ax[ax_attribute].first
-          end
+          # if ax[ax_attribute].is_a? Array
+          #   ax[ax_attribute] = ax[ax_attribute].first
+          # end
           @user.send("#{model_attribute}=", ax[ax_attribute])
         end
       end
