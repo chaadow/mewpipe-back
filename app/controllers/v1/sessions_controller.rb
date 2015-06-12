@@ -12,7 +12,7 @@ class V1::SessionsController < V1::BaseController
             unless user = User.find_by(identity_url: identity_url)
               user = User.create(identity_url: identity_url)
             end
-            sign_in user
+            sign_in :user, user
           else
             render json: "ERROR INSIDE OPEN ID"
           end
