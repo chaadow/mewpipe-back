@@ -57,7 +57,7 @@ class V1::SessionsController < V1::BaseController
               assign_registration_attributes!(registration)
               @user.password = "password"
               if @user.save
-                binding.pry
+                # binding.pry
                 successful_login
               else
                 failed_login "Your OpenID profile registration failed: " +
@@ -86,7 +86,7 @@ class V1::SessionsController < V1::BaseController
     end
 
     def successful_login
-      binding.pry
+      # binding.pry
       redirect_to "http://localhost:3000/#/redirect/#{@user.id}/#{@user.auth_token}"
     end
     def failed_login(message)
