@@ -10,7 +10,7 @@ class V1::SessionsController < V1::BaseController
             # FIXME - needs normalizing before
             # checking for the identity_url
 
-            @user = User.find_or_initialize_by_identity(identity_url: identity_url)
+            @user = User.find_or_initialize_by(identity_url: identity_url)
              if @user.new_record?
                @user.username = registration['nickname']
                @user.firstname = "Firstname openid"
