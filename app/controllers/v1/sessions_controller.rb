@@ -87,7 +87,7 @@ class V1::SessionsController < V1::BaseController
 
     def successful_login
       # binding.pry
-      redirect_to "http://localhost:3000/#/redirect/#{@user.id}/#{@user.auth_token}"
+      redirect_to "http://localhost:3000/#/redirect/#{@user.id}/#{@user.auth_token}/"
     end
     def failed_login(message)
       redirect_to "http://localhost:3000/#/redirect///#{message}"
