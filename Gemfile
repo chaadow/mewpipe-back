@@ -48,7 +48,7 @@ gem 'rspec-api_helpers', github: 'kollegorna/rspec-api_helpers'
  gem 'impressionist'
 
 
-gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+ gem "paperclip", "~> 4.2"
 
 gem 'paperclip-av-transcoder'
 
@@ -64,17 +64,17 @@ group :development do
   gem 'annotate', branch: 'develop'
 
 end
-
+gem 'pry-rails'
+gem 'pry-byebug'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'pry-rails'
+
   gem 'rspec-rails', '~> 3.1.0'
   gem 'faker'
   gem 'factory_girl_rails', '~> 4.5.0'
