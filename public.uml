@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.schema:mewpipe_development.public</OriginalElement>
+  <nodes>
+    <node x="0.0" y="1015.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.taggings</node>
+    <node x="966.0" y="0.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.delayed_jobs</node>
+    <node x="573.0" y="0.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.impressions</node>
+    <node x="679.0" y="1015.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.schema_migrations</node>
+    <node x="0.0" y="0.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.users</node>
+    <node x="70.0" y="587.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.videos</node>
+    <node x="506.0" y="1015.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.tags</node>
+    <node x="273.0" y="1015.0">85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.friendly_id_slugs</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.videos" target="85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.users">
+      <point x="0.0" y="-191.5" />
+      <point x="0.0" y="268.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5096618357487923" x="637.0" y="611.0" />
+  <SelectedNodes>
+    <node>85a7ce9b-d9bf-44f4-a751-dd883f2eec3c.table:mewpipe_development.public.impressions</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Key columns</Category>
+  </Categories>
+</Diagram>
+

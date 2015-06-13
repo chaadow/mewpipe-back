@@ -1,4 +1,7 @@
 class V1::VideoSerializer < V1::BaseSerializer
+
+  cache key: 'videos', expires_in: 1.hour
+  
   attributes :id, :title, :description, :confidentiality, :thumb,
              :mp4, :file, :file_meta, :created_at, :updated_at,
              :tag_list, :ogg, :webm, :view_count, :slug, :small, :poster,

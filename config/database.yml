@@ -20,8 +20,6 @@ default: &default
   pool: 5
   username: mewpipe
   password: password
-  host: localhost
-  port: 5432
   template: template0
 
 development:
