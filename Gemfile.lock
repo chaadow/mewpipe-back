@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/kollegorna/active_hash_relation.git
-  revision: 9622c4c13947bd9592a0e91c038bb02671b7e491
+  revision: 73ab23cd7f86023f25d402c2ceda47080945f7c3
   specs:
     active_hash_relation (0.0.3)
 
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: git://github.com/rails-api/active_model_serializers.git
-  revision: 460150fef28b298a38bb2bd0ef424cf968c5692f
+  revision: 7fa123bd6bb8870288c0a3ac1bdac4edd43a650a
   specs:
     active_model_serializers (0.10.0.rc1)
       activemodel (>= 4.0)
