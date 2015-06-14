@@ -1,30 +1,43 @@
 # Overview
 
-## General Notes
-You are encouraged to always provide a valid `user-agent` string.
+## Notes générales
+Il est conseillé de fournir un `user-agent` valide.
 
-## Current Version
+## Version Actuellet
 
-The current version of API is V1. The version is defined on the resource, thus reflecting
-the resource version and not in the Accept header.
+La version actuelle de l'API est la V1. La version est définie soit dans le 'Accept header' soit au niveau de l'url.
+
+Mais egalement pour des raisons de facilité d'utilisation, nous avons fait en sorte que la V1 soit la version par defaut et donc de ne specifier ni 'accept header' ni mettre le nom de la version dans l'url.
 
 ```http
 GET /api/v1/resource HTTP/1.1
 User-Agent: MyClient/1.0.0
 Accept: application/json
-Host: rails-tutorial-api.heroku.com
+Host: api.mewpipe.com
+```
+```http
+GET /api/resource HTTP/1.1
+User-Agent: MyClient/1.0.0
+Accept: application/vnd.mewpipe.com; version=1
+Host: api.mewpipe.com
+```
+```http
+GET /api/resource HTTP/1.1
+User-Agent: MyClient/1.0.0
+Accept: application/json
+Host: api.mewpipe.com
 ```
 
 ## DateTimes representations
 
 
-All date/time representations are on ISO 8601 format:
+Toutes les representations date/time sont au format ISO 8601.
 ```
 YYYY-MM-DDTHH:MM:SSZ
 ```
-The returned timezone is UTC.
+Le timezone retourné est en UTC.
 
-## Client Errors
+## Erreurs clients.
 ```http
 HTTP/1.1 400 Bad Request
 Content-Length: 35
@@ -49,21 +62,21 @@ Content-Length: 149
 }
 ```
 ```http
-HTTP/1.1 401 Unprocessable Entity
+HTTP/1.1 401 Unauthorized
 Content-Length: 149
 {
   "message": "Authentication Failed",
 }
 ```
 ```http
-HTTP/1.1 403 Unprocessable Entity
+HTTP/1.1 403 Forbidden
 Content-Length: 149
 {
   "message": "Not authorized action for that resource",
 }
 ```
 ```http
-HTTP/1.1 500 Unprocessable Entity
+HTTP/1.1 500 Internal server error
 Content-Length: 149
 {
   "message": "Something went terribly wrong here. Open a github issue :)",
@@ -82,7 +95,7 @@ Error Code | Meaning
 406 | Not Acceptable -- You requested a format that isn't json
 422 | lalala -- Your request is understood but you miss a required param, or part of your json is in wrong format (like sending an date object in an integer param)
 429 | Too Many Requests -- Slown down! Follow the rate limits!
-500 | Internal Server Error -- Something went terribly wrong, open a gihub issue :) 
+500 | Internal Server Error -- Something went terribly wrong, open a gihub issue :)
 
 
 ## Authentication
@@ -91,7 +104,7 @@ Error Code | Meaning
 POST /api/v1/sessions HTTP/1.1
 User-Agent: MyClient/1.0.0
 Accept: application/json
-Host: rails-tutorial-api.heroku.com
+Host: api.mewpipe.com
 {
   "user": {
     "email": "example@railstutorial.org",
@@ -103,22 +116,21 @@ Host: rails-tutorial-api.heroku.com
 HTTP/1.1 200 OK
 Content-Type: application/json
 {
-  "token": "TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA==",
-  "user_email": "example@railstutorial.org",
-  "user_id": 1
+  "auth_token": "TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA",
+  "email": "example@railstutorial.org",
+  "id": 1
 }
 ```
 
-In order to be able to act on behalf of a user, you must first retrieve her token
-via the sessions endpoint.
+Pour pouvoir faire des requetes authentifieées, il faut d'abord recuper le token, via le point de terminaison des sessions.
 
 
-## Authorization
+## Autorisation
 ```http
 GET /api/v1/resource HTTP/1.1
 User-Agent: MyClient/1.0.0
 Accept: application/json
-Host: rails-tutorial-api.heroku.com
+Host: api.mewpipe.com
 Authorization: Token token="TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA==", user_email="example@railstutorial.org"
 ```
 ```http
@@ -128,8 +140,7 @@ Content-Type: application/json
   "user":{
     "id":1,
     "email":"example@railstutorial.org",
-    "name":"Example Use",
-    "activated":true,
+    "nickname":"Example Use",
     "created_at":"2015-01-13T20:35:24Z",
     "updated_at":"2015-02-09T19:47:36Z"
   }
@@ -146,7 +157,7 @@ You can authenticate in the API by providing the user's token and email in the `
 GET /api/v1/resource?page=2&per_page=100 HTTP/1.1
 User-Agent: MyClient/1.0.0
 Accept: application/vnd.travis-ci.2+json
-Host: rails-tutorial-api.heroku.com
+Host: api.mewpipe.com
 ```
 
 Requests that return multiple items will be paginated to 30 items by default.
@@ -216,5 +227,4 @@ It includes, the current requested page, next page, previous page, total pages a
 When requesting a list of resources, default sorting is descending by creation datetime.
 
 For all collection endpoints, active_hash_relation has been used which means you have plenty
-options to filter 
-
+options to filter
