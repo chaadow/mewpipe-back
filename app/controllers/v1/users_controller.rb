@@ -53,8 +53,7 @@ class V1::UsersController < V1::BaseController
     render(
       json: user, root: "user", serializer: V1::UserSerializer,
       status: 200,
-      location: v1_user_path(user.id),
-      serializer: V1::UserSerializer
+      location: v1_user_path(user.id)
     )
   end
 

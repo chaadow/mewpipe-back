@@ -24,7 +24,7 @@ if Rails.env.development?
 
   # Site & settings generation
   def make_sites
-    sites = ['arizuka.com', 'localhost']
+    sites = ['mewpipe.com', 'localhost']
 
     sites.each do |s|
       print("Create #{s} site (site, settings, style, partners, homepage, pages, news, questions, users, grey_labels)...")
@@ -38,7 +38,7 @@ if Rails.env.development?
   # User generation
   def make_admins(site)
     print("Create admin user for site #{site.domain}...")
-    FactoryGirl.create(:confirmed_admin, :email => "admin@arizuka.com", :password => "password", :password_confirmation => "password", :site => site)
+    FactoryGirl.create(:confirmed_admin, :email => "admin@mewpipe.com", :password => "password", :password_confirmation => "password", :site => site)
     puts(" Done.")
   end
 

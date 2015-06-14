@@ -160,7 +160,7 @@ exec { 'install_bundler':
   require => Exec['install_ruby']
 }
 
-# --- Arizuka --------------------------------------------------------------------
+# --- MEWPIPE --------------------------------------------------------------------
 
 # Install project gems
 exec { 'bundle_update':

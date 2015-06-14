@@ -8,6 +8,7 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
+require 'rack/redis_throttle'
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
@@ -33,6 +34,8 @@ module Mewpipe
     config.active_record.raise_in_transactional_callbacks = true
 
     config.active_job.queue_adapter = :delayed_job
+
+    config.middleware.use Rack::RedisThrottle::Daily, max: 100000
 
     config.middleware.insert_before 'Rack::Runtime', "Rack::Cors" do
       allow do
