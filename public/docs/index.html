@@ -107,8 +107,8 @@ Donc : <code class="prettyprint">http://api.mewpipe.com/videos/123123</code> est
 
 <h2 id="generation-du-token">Generation du token</h2>
 
-<p>Le processus de generation du token est delege A <code class="prettyprint">SecureRandom.uuid</code>. Cette methode fait partie de la bibliotheque standard et retourne un UUID(Universally Unique Identifier) qui est garanti d&#39;etre unique sur un namespace globa
-process is delegated to SecureRandom.uuid. This method is part of Ruby’s standard library, and returns a Universally Unique Identifier (RFC 4122) that’s guaranteed to be unique across a global namespace. Egalement nous enleve les &rsquo;-&rsquo; pour rendre le token plus &#39;user-friendly&rsquo;.</p>
+<p>Le processus de generation du token est delege A <code class="prettyprint">SecureRandom.uuid</code>. Cette methode fait partie de la bibliotheque standard et retourne un UUID(Universally Unique Identifier) qui est garanti d&#39;etre unique sur un namespace global.
+ Egalement nous enleve les &rsquo;-&rsquo; pour rendre le token plus &#39;user-friendly&rsquo;.</p>
 
 <p>De plus, nous faisons en sorte que l unicite du token se fasse au niveau DE LA BASE DE DONNEE en ajoutant un index unique au champ correspondant au token.</p>
 
@@ -312,8 +312,7 @@ Ce dernier inclut nottament, la page actuelle demandee, l&#39;indice de la page 
 
 <h2 id="autres-informations">Autres informations</h2>
 
-<p>Quand une liste de ressource est demandée, l&#39;ordre par defaut est par la date de creation en decroissant.
-When requesting a list of resources, default sorting is descending by creation datetime.</p>
+<p>Quand une liste de ressource est demandée, l&#39;ordre par defaut est par la date de creation en decroissant.</p>
 
 <p>Pour chaque collection (de videos et de users notamment), une couche d&#39;orchestration a ete utilisee, ce qui donne de multitude de fonctionnalite en plus. telle que le filtrage, la recherche par tags, les collection avant une date precise etc..</p>
 

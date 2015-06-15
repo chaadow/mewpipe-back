@@ -43,8 +43,8 @@ Host: api.mewpipe.com
 ```
 
 ## Generation du token
-Le processus de generation du token est delege A `SecureRandom.uuid`. Cette methode fait partie de la bibliotheque standard et retourne un UUID(Universally Unique Identifier) qui est garanti d'etre unique sur un namespace globa
-process is delegated to SecureRandom.uuid. This method is part of Ruby’s standard library, and returns a Universally Unique Identifier (RFC 4122) that’s guaranteed to be unique across a global namespace. Egalement nous enleve les '-' pour rendre le token plus 'user-friendly'.
+Le processus de generation du token est delege A `SecureRandom.uuid`. Cette methode fait partie de la bibliotheque standard et retourne un UUID(Universally Unique Identifier) qui est garanti d'etre unique sur un namespace global.
+ Egalement nous enleve les '-' pour rendre le token plus 'user-friendly'.
 
 De plus, nous faisons en sorte que l unicite du token se fasse au niveau DE LA BASE DE DONNEE en ajoutant un index unique au champ correspondant au token.
 ## Representations des dates time
@@ -232,6 +232,5 @@ Ce dernier inclut nottament, la page actuelle demandee, l'indice de la page suiv
 
 ## Autres informations
 Quand une liste de ressource est demandée, l'ordre par defaut est par la date de creation en decroissant.
-When requesting a list of resources, default sorting is descending by creation datetime.
 
 Pour chaque collection (de videos et de users notamment), une couche d'orchestration a ete utilisee, ce qui donne de multitude de fonctionnalite en plus. telle que le filtrage, la recherche par tags, les collection avant une date precise etc..
