@@ -11,6 +11,7 @@ toc_footers:
 includes:
   - overview
   - users
+  - videos
 
 search: true
 ---

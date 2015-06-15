@@ -1,4 +1,4 @@
-# Overview
+# Vue d'ensemble de l'API
 
 ## Notes générales
 Il est conseillé de fournir un `user-agent` valide.
@@ -13,10 +13,10 @@ La version actuelle de l'API est la V1. La version est définie soit dans le 'Ac
 
  - Pour des raison de simplicite et de facilite d'utilisation, et grace a l'implementation de la gem "versionist" gem nous allons implementer DEUX strategies:
 
-   - The path strategy: The simplest and most controversioal approach, yet widely used by many big companies, which allows the request to be made **without any extra headers**, by specifiying the version of the API in the URL. Example: `api.mewpipe.com/v1/users/31342`
-  -  La strategie Content negotiation via le Accept header:
-   - C'est la solution la plus *restful*. Mais pas tres facile pour les clients. Parcequ'ils doivent specifier le header sur chaque requete.Neanmoins, c'est la solution la plus concise a implementer.
-   - Cette strategie utilise un header HTTP pour demander une version speicifique de l'API
+   - La strategie du chemin (path strategy): La plus simple et la plus controverse, bien qu'elle soit utilisee par des gros acteurs du marche, qui permet de faire des requete sans des header specifiques, en specifiant le nom de la version dans l'url. Example: `api.mewpipe.com/v1/users/31342`
+   -  La strategie Content negotiation via le Accept header:
+      - C'est la solution la plus *restful*. Mais pas tres facile pour les clients. Parcequ'ils doivent specifier le header sur chaque requete.Neanmoins, c'est la solution la plus concise a implementer.
+      - Cette strategie utilise un header HTTP pour demander une version speicifique de l'API
 `Accept: application/vnd.mycompany.com; version=1,application/json`
 
 

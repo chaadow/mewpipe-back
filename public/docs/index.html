@@ -59,7 +59,7 @@ L&#39;implementation de l&#39;API se trouve dans le code source envoyé par mail
 
 <p>Ce qui suit documente la V1 de l&#39;API.</p>
 
-          <h1 id="overview">Overview</h1>
+          <h1 id="vue-d&#39;ensemble-de-l&#39;api">Vue d&#39;ensemble de l&#39;API</h1>
 
 <h2 id="notes-générales">Notes générales</h2>
 
@@ -76,11 +76,14 @@ L&#39;implementation de l&#39;API se trouve dans le code source envoyé par mail
 <li>Ceci permet au traffic d&#39;etre <strong>load balanced</strong> au niveau  <strong>DNS</strong></li>
 <li>Cela veut dire que si l&#39;API est sous une charge importante, on peut pointer le DNS de l&#39;API a un autre ensemble de serveur et la &ldquo;scale&rdquo; independamment de l&#39;application principale.</li>
 <li>Pour des raison de simplicite et de facilite d&#39;utilisation, et grace a l&#39;implementation de la gem &ldquo;versionist&rdquo; gem nous allons implementer DEUX strategies:</li>
-<li>The path strategy: The simplest and most controversioal approach, yet widely used by many big companies, which allows the request to be made <strong>without any extra headers</strong>, by specifiying the version of the API in the URL. Example: <code class="prettyprint">api.mewpipe.com/v1/users/31342</code></li>
-<li> La strategie Content negotiation via le Accept header:</li>
+<li>La strategie du chemin (path strategy): La plus simple et la plus controverse, bien qu&#39;elle soit utilisee par des gros acteurs du marche, qui permet de faire des requete sans des header specifiques, en specifiant le nom de la version dans l&#39;url. Example: <code class="prettyprint">api.mewpipe.com/v1/users/31342</code></li>
+<li> La strategie Content negotiation via le Accept header:
+
+<ul>
 <li>C&#39;est la solution la plus <em>restful</em>. Mais pas tres facile pour les clients. Parcequ&#39;ils doivent specifier le header sur chaque requete.Neanmoins, c&#39;est la solution la plus concise a implementer.</li>
 <li>Cette strategie utilise un header HTTP pour demander une version speicifique de l&#39;API
 <code class="prettyprint">Accept: application/vnd.mycompany.com; version=1,application/json</code></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -205,7 +208,7 @@ Le timezone retourné est en UTC.</p>
 </tbody></table>
 
 <h2 id="authentication">Authentication</h2>
-<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">v1/sessions</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">v1/login</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
@@ -435,6 +438,216 @@ It doesn&rsquo;t require authentication.</p>
 
 <h2 id="destroy-a-user">Destroy a User</h2>
 <pre><code class="highlight http"><span class="nf">DELETE</span> <span class="nn">v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+</code></pre>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">NO CONTENT</span>
+
+</code></pre>
+
+<p>You get back a 204 no Content.</p>
+
+          <h1 id="videos">Videos</h1>
+
+<h2 id="list-videos">List Videos</h2>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/videos</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+</code></pre>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
+<span class="s">{</span>
+<span class="s">  "videos": [</span>
+<span class="s">      {</span>
+<span class="s">        "id": 7,</span>
+<span class="s">        "title": "hhh",</span>
+<span class="s">        "description": "ohjoh",</span>
+<span class="s">        "confidentiality": "public",</span>
+<span class="s">        "thumb": "/system/videos/files/000/000/007/thumb/clydesdales_stock.mp4.jpg?1433964475",</span>
+<span class="s">        "mp4": "/system/videos/files/000/000/007/original/clydesdales_stock.mp4.mp4?1433964475",</span>
+<span class="s">        "file": "/system/videos/files/000/000/007/original/clydesdales_stock.mp4.mp4?1433964475",</span>
+<span class="s">        "file_meta": {</span>
+<span class="s">          "length": "0:00:19.47",</span>
+<span class="s">          "duration": 19.47,</span>
+<span class="s">          "fps": 29,</span>
+<span class="s">          "size": "1280x720",</span>
+<span class="s">          "width": 1280,</span>
+<span class="s">          "height": 720,</span>
+<span class="s">          "aspect": 1.7777777777777777,</span>
+<span class="s">          "audio_encode": "aac",</span>
+<span class="s">          "audio_bitrate": "48000 Hz",</span>
+<span class="s">          "audio_channels": "stereo"</span>
+<span class="s">        },</span>
+<span class="s">        "created_at": "2015-06-10T19:27:52Z",</span>
+<span class="s">        "updated_at": "2015-06-10T19:28:36Z",</span>
+<span class="s">        "tag_list": [</span>
+<span class="s">          "haha",</span>
+<span class="s">          "hello",</span>
+<span class="s">          "nature"</span>
+<span class="s">        ],</span>
+<span class="s">        "ogg": "/system/videos/files/000/000/007/ogg/clydesdales_stock.mp4.ogg?1433964475",</span>
+<span class="s">        "webm": "/system/videos/files/000/000/007/webm/clydesdales_stock.mp4.webm?1433964475",</span>
+<span class="s">        "view_count": 0,</span>
+<span class="s">        "slug": "hhh-e7e6fd49-01d4-4bfb-975d-475f170741c0",</span>
+<span class="s">        "small": "/system/videos/files/000/000/007/small/clydesdales_stock.mp4.jpg?1433964475",</span>
+<span class="s">        "poster": "/system/videos/files/000/000/007/poster/clydesdales_stock.mp4.mp4?1433964475",</span>
+<span class="s">        "page_views": 0,</span>
+<span class="s">        "user": {</span>
+<span class="s">          "id": 1,</span>
+<span class="s">          "email": "blabla@msn.com",</span>
+<span class="s">          "firstname": "chedli",</span>
+<span class="s">          "lastname": "bourguiba",</span>
+<span class="s">          "admin": false,</span>
+<span class="s">          "created_at": "2015-06-10T18:17:09Z",</span>
+<span class="s">          "updated_at": "2015-06-12T00:38:53Z",</span>
+<span class="s">          "avatar": "/system/users/avatars/000/000/001/original/Emna.jpg?1434042041",</span>
+<span class="s">          "username": null,</span>
+<span class="s">          "identity_url": null</span>
+<span class="s">        }</span>
+<span class="s">      },</span>
+<span class="s">      {</span>
+<span class="s">        "id": 6,</span>
+<span class="s">        "title": "hhh",</span>
+<span class="s">        "description": "ohjoh",</span>
+<span class="s">        "confidentiality": "public",</span>
+<span class="s">        "thumb": "/system/videos/files/000/000/006/thumb/clydesdales_stock.mp4.jpg?1433964366",</span>
+<span class="s">        "mp4": "/system/videos/files/000/000/006/original/clydesdales_stock.mp4.mp4?1433964366",</span>
+<span class="s">        "file": "/system/videos/files/000/000/006/original/clydesdales_stock.mp4.mp4?1433964366",</span>
+<span class="s">        "file_meta": {</span>
+<span class="s">          "length": "0:00:19.47",</span>
+<span class="s">          "duration": 19.47,</span>
+<span class="s">          "fps": 29,</span>
+<span class="s">          "size": "1280x720",</span>
+<span class="s">          "width": 1280,</span>
+<span class="s">          "height": 720,</span>
+<span class="s">          "aspect": 1.7777777777777777,</span>
+<span class="s">          "audio_encode": "aac",</span>
+<span class="s">          "audio_bitrate": "48000 Hz",</span>
+<span class="s">          "audio_channels": "stereo"</span>
+<span class="s">        },</span>
+<span class="s">        "created_at": "2015-06-10T19:26:03Z",</span>
+<span class="s">        "updated_at": "2015-06-10T19:26:47Z",</span>
+<span class="s">        "tag_list": [</span>
+<span class="s">          "haha",</span>
+<span class="s">          "hello",</span>
+<span class="s">          "nature"</span>
+<span class="s">        ],</span>
+<span class="s">        "ogg": "/system/videos/files/000/000/006/ogg/clydesdales_stock.mp4.ogg?1433964366",</span>
+<span class="s">        "webm": "/system/videos/files/000/000/006/webm/clydesdales_stock.mp4.webm?1433964366",</span>
+<span class="s">        "view_count": 0,</span>
+<span class="s">        "slug": "hhh-eb912da2-561b-4222-a2f2-4a921c4d4269",</span>
+<span class="s">        "small": "/system/videos/files/000/000/006/small/clydesdales_stock.mp4.jpg?1433964366",</span>
+<span class="s">        "poster": "/system/videos/files/000/000/006/poster/clydesdales_stock.mp4.mp4?1433964366",</span>
+<span class="s">        "page_views": 0,</span>
+<span class="s">        "user": {</span>
+<span class="s">          "id": 1,</span>
+<span class="s">          "email": "blabla@msn.com",</span>
+<span class="s">          "firstname": "chedli",</span>
+<span class="s">          "lastname": "bourguiba",</span>
+<span class="s">          "admin": false,</span>
+<span class="s">          "created_at": "2015-06-10T18:17:09Z",</span>
+<span class="s">          "updated_at": "2015-06-12T00:38:53Z",</span>
+<span class="s">          "avatar": "/system/users/avatars/000/000/001/original/Emna.jpg?1434042041",</span>
+<span class="s">          "username": null,</span>
+<span class="s">          "identity_url": null</span>
+<span class="s">        }</span>
+<span class="s">      }],</span>
+<span class="s">  "meta":{</span>
+<span class="s">    "current_page":1,</span>
+<span class="s">    "next_page":2,</span>
+<span class="s">    "prev_page":null,</span>
+<span class="s">    "total_pages":10,</span>
+<span class="s">    "total_count":300</span>
+<span class="s">  }</span>
+<span class="s">}</span>
+</code></pre>
+
+<p>Vous pouvez GET les videos publiques dans /videos.
+Vous pouvez filtrer par n&#39;importe quel attribut.
+Pour plus d&#39;infos sur la micro API qui gere cela: cliquez: <a href="https://github.com/kollegorna/active_hash_relation">ici</a>.</p>
+
+<h2 id="upload-une-video">Upload une video</h2>
+<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">v1/videos/upload</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+
+{
+  "video": {
+    "title": "jjj",
+    "description": null,
+    "confidentiality": "public",
+    "file": "CONTENT ENCODED"
+  }
+}
+</code></pre>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">CREATED</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
+<span class="s">{</span>
+<span class="s">  "video": {</span>
+<span class="s">    "title": "jjj",</span>
+<span class="s">    "description": null,</span>
+<span class="s">    "confidentiality": "public",</span>
+<span class="s">    "file": "/system/videos/files/000/000/017/original/2010-07-06_01.33.10.mp4?1434154489"</span>
+<span class="s">  }</span>
+<span class="s">},</span>
+</code></pre>
+
+<p>Vous pouvez creer une video avec ces parametreS.
+You can create a new user sending a POST to <code class="prettyprint">v1/videos</code> with the necessary attributes.
+A user object should at least include, an email, a password
+Ceci requiert l authentification.</p>
+
+<h2 id="show-a-video">Show a video</h2>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/videos/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+</code></pre>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
+<span class="s">{</span>
+<span class="s">  "video": {</span>
+<span class="s">    "id": 1</span>
+<span class="s">    "title": "jjj",</span>
+<span class="s">    "description": null,</span>
+<span class="s">    "confidentiality": "public",</span>
+<span class="s">    "file": "/system/videos/files/000/000/017/original/2010-07-06_01.33.10.mp4?1434154489"</span>
+<span class="s">  }</span>
+<span class="s">},</span>
+</code></pre>
+
+<p>You can retrieve a video&rsquo;s info by sending a GET request to <code class="prettyprint">v1/videos/{id}</code>.</p>
+
+<h2 id="update-a-video">Update a video</h2>
+<pre><code class="highlight http"><span class="nf">PUT</span> <span class="nn">v1/videos/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+<span class="s">{</span>
+<span class="s">  "video": {</span>
+<span class="s">    "id": "12"</span>
+<span class="s">    "title": "jjj",</span>
+<span class="s">    "description": null,</span>
+<span class="s">    "confidentiality": "public",</span>
+<span class="s">    "file": "/system/videos/files/000/000/017/original/2010-07-06_01.33.10.mp4?1434154489"</span>
+<span class="s">  }</span>
+<span class="s">}</span>
+</code></pre>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
+<span class="s">{</span>
+<span class="s">  "video": {</span>
+<span class="s">    "id": 12</span>
+<span class="s">    "title": "jjj",</span>
+<span class="s">    "description": null,</span>
+<span class="s">    "confidentiality": "public",</span>
+<span class="s">    "file": "/system/videos/files/000/000/017/original/2010-07-06_01.33.10.mp4?1434154489"</span>
+<span class="s">  }</span>
+<span class="s">},</span>
+</code></pre>
+
+<p>You can update a video&rsquo;s attributes by sending a PUT request to <code class="prettyprint">v1/videos/{id}</code> with the necessary attributes.</p>
+
+<h2 id="destroy-une-video">Destroy une video</h2>
+<pre><code class="highlight http"><span class="nf">DELETE</span> <span class="nn">v1/videos/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 </code></pre>
