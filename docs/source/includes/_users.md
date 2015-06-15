@@ -2,9 +2,9 @@
 
 ## List Users
 ```http
-GET /api/v1/users HTTP/1.1
+GET v1/users HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 ```
 ```http
 HTTP/1.1 200 OK
@@ -38,17 +38,16 @@ Content-Length: 4567
 }
 ```
 
-You can GET all users in /api/v1/users.
-You can filter by any attribute.
-More on the index micro-API [here](https://github.com/kollegorna/active_hash_relation).
-It doesn't require authentication.
+You can GET all users in v1/users.
+Vous pouvez filtrer par n'importe quel attribut.
+Pour plus d'infos sur la micro API qui gere cela: cliquez: [ic](https://github.com/kollegorna/active_hash_relation).
 
 
-## Create a User
+## Creer un Utilisateur
 ```http
-POST /api/v1/users HTTP/1.1
+POST v1/users HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 
 {
   "user": {
@@ -72,16 +71,16 @@ Content-Length: 4567
 },
 ```
 
-You can create a new user sending a POST to `/api/v1/users` with the necessary attributes.
+You can create a new user sending a POST to `v1/users` with the necessary attributes.
 A user object should at least include, an email, a password
 It doesn't require authentication.
 
 
 ## Show a User
 ```http
-GET /api/v1/users/1 HTTP/1.1
+GET v1/users/1 HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 ```
 ```http
 HTTP/1.1 200 OK
@@ -97,14 +96,14 @@ Content-Length: 4567
   }
 },
 ```
-You can retrieve a user's info by sending a GET request to `/api/v1/users/{id}`.
+You can retrieve a user's info by sending a GET request to `v1/users/{id}`.
 
 
 ## Update a User
 ```http
-PUT /api/v1/users/1 HTTP/1.1
+PUT v1/users/1 HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 {
   "user": {
     "nickname":"An updated name",
@@ -125,14 +124,14 @@ Content-Length: 4567
   }
 },
 ```
-You can update a user's attributes by sending a PUT request to `/api/v1/users/{id}` with the necessary attributes.
+You can update a user's attributes by sending a PUT request to `v1/users/{id}` with the necessary attributes.
 
 
 ## Destroy a User
 ```http
-DELETE /api/v1/users/1 HTTP/1.1
+DELETE v1/users/1 HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 ```
 ```http
 HTTP/1.1 204 NO CONTENT

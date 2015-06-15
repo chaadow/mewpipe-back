@@ -3,32 +3,51 @@
 ## Notes générales
 Il est conseillé de fournir un `user-agent` valide.
 
-## Version Actuellet
+## Version Actuelle
 
 La version actuelle de l'API est la V1. La version est définie soit dans le 'Accept header' soit au niveau de l'url.
 
-Mais egalement pour des raisons de facilité d'utilisation, nous avons fait en sorte que la V1 soit la version par defaut et donc de ne specifier ni 'accept header' ni mettre le nom de la version dans l'url.
+- L'API est servie sous un sous domaine: `api.mewpipe.com`
+  - Ceci permet au traffic d'etre **load balanced** au niveau  **DNS**
+    - Cela veut dire que si l'API est sous une charge importante, on peut pointer le DNS de l'API a un autre ensemble de serveur et la "scale" independamment de l'application principale.
+
+ - Pour des raison de simplicite et de facilite d'utilisation, et grace a l'implementation de la gem "versionist" gem nous allons implementer DEUX strategies:
+
+   - The path strategy: The simplest and most controversioal approach, yet widely used by many big companies, which allows the request to be made **without any extra headers**, by specifiying the version of the API in the URL. Example: `api.mewpipe.com/v1/users/31342`
+  -  La strategie Content negotiation via le Accept header:
+   - C'est la solution la plus *restful*. Mais pas tres facile pour les clients. Parcequ'ils doivent specifier le header sur chaque requete.Neanmoins, c'est la solution la plus concise a implementer.
+   - Cette strategie utilise un header HTTP pour demander une version speicifique de l'API
+`Accept: application/vnd.mycompany.com; version=1,application/json`
+
+
+Egalement, en pensant aux developpeurs qui vont utiliser notre API, cette derniere est configuree de sorte que la premiere version est celle par defaut.
+Donc : `http://api.mewpipe.com/videos/123123` est  equivalent a `http://api.mewpipe.com/v1/videos/123123` pour les clients qui preferent utiliser la version par chemin.
 
 ```http
-GET /api/v1/resource HTTP/1.1
-User-Agent: MyClient/1.0.0
-Accept: application/json
-Host: api.mewpipe.com
-```
-```http
-GET /api/resource HTTP/1.1
+GET v1/resource HTTP/1.1
 User-Agent: MyClient/1.0.0
 Accept: application/vnd.mewpipe.com; version=1
 Host: api.mewpipe.com
 ```
 ```http
-GET /api/resource HTTP/1.1
+GET resource HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
+Host: api.mewpipe.com
+```
+```http
+GET resource HTTP/1.1
+User-Agent: MyClient/1.0.0
+Accept: application/vnd.mewpipe.com; version=1
 Host: api.mewpipe.com
 ```
 
-## DateTimes representations
+## Generation du token
+Le processus de generation du token est delege A `SecureRandom.uuid`. Cette methode fait partie de la bibliotheque standard et retourne un UUID(Universally Unique Identifier) qui est garanti d'etre unique sur un namespace globa
+process is delegated to SecureRandom.uuid. This method is part of Ruby’s standard library, and returns a Universally Unique Identifier (RFC 4122) that’s guaranteed to be unique across a global namespace. Egalement nous enleve les '-' pour rendre le token plus 'user-friendly'.
+
+De plus, nous faisons en sorte que l unicite du token se fasse au niveau DE LA BASE DE DONNEE en ajoutant un index unique au champ correspondant au token.
+## Representations des dates time
 
 
 Toutes les representations date/time sont au format ISO 8601.
@@ -79,7 +98,7 @@ Content-Length: 149
 HTTP/1.1 500 Internal server error
 Content-Length: 149
 {
-  "message": "Something went terribly wrong here. Open a github issue :)",
+  "message": "Something went terribly wrong here.",
 }
 ```
 
@@ -101,9 +120,9 @@ Error Code | Meaning
 ## Authentication
 
 ```http
-POST /api/v1/sessions HTTP/1.1
+POST v1/login HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 Host: api.mewpipe.com
 {
   "user": {
@@ -114,7 +133,7 @@ Host: api.mewpipe.com
 ```
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.mewpipe.com; version=1
 {
   "auth_token": "TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA",
   "email": "example@railstutorial.org",
@@ -122,20 +141,20 @@ Content-Type: application/json
 }
 ```
 
-Pour pouvoir faire des requetes authentifieées, il faut d'abord recuper le token, via le point de terminaison des sessions.
+Pour pouvoir faire des requetes authentifiées, il faut d'abord recuperer le token, via le point de terminaison des sessions.
 
 
 ## Autorisation
 ```http
-GET /api/v1/resource HTTP/1.1
+GET v1/resource HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 Host: api.mewpipe.com
 Authorization: Token token="TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA==", user_email="example@railstutorial.org"
 ```
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+Content-Type: application/vnd.mewpipe.com; version=1
 {
   "user":{
     "id":1,
@@ -146,26 +165,22 @@ Content-Type: application/json
   }
 }
 ```
-
-You can authenticate in the API by providing the user's token and email in the `Authorization` header.
-
+Vous pouvez vous authentifier à l'API en fournissant le token et l'email du user.
 
 
 
 ## Pagination
 ```http
-GET /api/v1/resource?page=2&per_page=100 HTTP/1.1
+GET v1/resource?page=2&per_page=100 HTTP/1.1
 User-Agent: MyClient/1.0.0
 Accept: application/vnd.travis-ci.2+json
 Host: api.mewpipe.com
 ```
 
-Requests that return multiple items will be paginated to 30 items by default.
-You can specify further pages with the `?page` parameter.
-For some resources, you can also set a custom page size up to 100 with the `?per_page` parameter.
+Par defaut, les requetes qui retournent beaucoup de ressources vont etre paginés à 30.
+Vous pouvez specifier d'autres pages en specifiant le `?page` parametre. Vous pouvez egalement etablir une taille customisé alant juqu'a 100 avec le `?per_page` parametre.
 
-
-## Rate Limiting
+## Quota de requetes.
 ```http
 HTTP/1.1 200 OK
 Date: Mon, 01 Jul 2013 17:27:06 GMT
@@ -173,27 +188,20 @@ Status: 200 OK
 X-Ratelimit-Limit: 100000
 X-Ratelimit-Remaining: 99994
 ```
+Vous pouvez verifier les headers HTTP de chaque requete d'API pour voir l etat actuel des requetes restantes a faire.
+Il devrait etre note que la limite du quota est variable, dependant de la charge du serveur, veuillez donc respecter les limites.
 
-You can check the returned HTTP headers of any API request to see your current rate limit status.
-
-It should be noted that the rate limit is variable, depending on the server load. Please stay on the limits.
-
-If you have abused the limits, you will receive a 429 error as described in the [Client Errors](#client-errors)
-
-<aside class="notice">
-Although there are no hard limits, you should follow the limits defined on the API response
-</aside>
+Si les limites ont été enfreintes, vous allez recevoir une erreur 429 comme decrit dans la section des erreurs client.
 
 
-
-## Cross Origin Resource Sharing
-The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin.
+## Cross Origin Resource Sharing (CORS)
+Cette API comprend Cross Origin Resource Sharing (CORS) pour les requetes AJAX requests venant de n'importe quelle origine.
 
 ## Meta Data
 ```http
-GET /api/v1/resources HTTP/1.1
+GET v1/resources HTTP/1.1
 User-Agent: MyClient/1.0.0
-Accept: application/json
+Accept: application/vnd.mewpipe.com; version=1
 ```
 ```http
 HTTP/1.1 200 OK
@@ -218,13 +226,12 @@ Content-Length: 4567
   }
 }
 ```
+Dans chaque requete GET sur les ressources `/videos` par exemple, il y a un champ en plus avec la racine "meta".
+Ce dernier inclut nottament, la page actuelle demandee, l'indice de la page suivante, la page precedente, le nombre total de page et le nombre total de la ressource en question.
 
-In each GET request that acts upon resources, there is an extra field in the response under "meta" root element.
-It includes, the current requested page, next page, previous page, total pages and the total number of resources under the given params.
 
-
-## Other information
+## Autres informations
+Quand une liste de ressource est demandée, l'ordre par defaut est par la date de creation en decroissant.
 When requesting a list of resources, default sorting is descending by creation datetime.
 
-For all collection endpoints, active_hash_relation has been used which means you have plenty
-options to filter
+Pour chaque collection (de videos et de users notamment), une couche d'orchestration a ete utilisee, ce qui donne de multitude de fonctionnalite en plus. telle que le filtrage, la recherche par tags, les collection avant une date precise etc..

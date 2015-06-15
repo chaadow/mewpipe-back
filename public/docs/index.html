@@ -61,29 +61,63 @@ L&#39;implementation de l&#39;API se trouve dans le code source envoyé par mail
 
           <h1 id="overview">Overview</h1>
 
-<h2 id="general-notes">General Notes</h2>
+<h2 id="notes-générales">Notes générales</h2>
 
-<p>You are encouraged to always provide a valid <code class="prettyprint">user-agent</code> string.</p>
+<p>Il est conseillé de fournir un <code class="prettyprint">user-agent</code> valide.</p>
 
-<h2 id="current-version">Current Version</h2>
+<h2 id="version-actuelle">Version Actuelle</h2>
 
-<p>The current version of API is V1. The version is defined on the resource, thus reflecting
-the resource version and not in the Accept header.</p>
-<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">/api/v1/resource</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<p>La version actuelle de l&#39;API est la V1. La version est définie soit dans le &lsquo;Accept header&rsquo; soit au niveau de l&#39;url.</p>
+
+<ul>
+<li><p>L&#39;API est servie sous un sous domaine: <code class="prettyprint">api.mewpipe.com</code></p>
+
+<ul>
+<li>Ceci permet au traffic d&#39;etre <strong>load balanced</strong> au niveau  <strong>DNS</strong></li>
+<li>Cela veut dire que si l&#39;API est sous une charge importante, on peut pointer le DNS de l&#39;API a un autre ensemble de serveur et la &ldquo;scale&rdquo; independamment de l&#39;application principale.</li>
+<li>Pour des raison de simplicite et de facilite d&#39;utilisation, et grace a l&#39;implementation de la gem &ldquo;versionist&rdquo; gem nous allons implementer DEUX strategies:</li>
+<li>The path strategy: The simplest and most controversioal approach, yet widely used by many big companies, which allows the request to be made <strong>without any extra headers</strong>, by specifiying the version of the API in the URL. Example: <code class="prettyprint">api.mewpipe.com/v1/users/31342</code></li>
+<li> La strategie Content negotiation via le Accept header:</li>
+<li>C&#39;est la solution la plus <em>restful</em>. Mais pas tres facile pour les clients. Parcequ&#39;ils doivent specifier le header sur chaque requete.Neanmoins, c&#39;est la solution la plus concise a implementer.</li>
+<li>Cette strategie utilise un header HTTP pour demander une version speicifique de l&#39;API
+<code class="prettyprint">Accept: application/vnd.mycompany.com; version=1,application/json</code></li>
+</ul></li>
+</ul>
+
+<p>Egalement, en pensant aux developpeurs qui vont utiliser notre API, cette derniere est configuree de sorte que la premiere version est celle par defaut.
+Donc : <code class="prettyprint">http://api.mewpipe.com/videos/123123</code> est  equivalent a <code class="prettyprint">http://api.mewpipe.com/v1/videos/123123</code> pour les clients qui preferent utiliser la version par chemin.</p>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/resource</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
-<span class="na">Host</span><span class="p">:</span> <span class="s">rails-tutorial-api.heroku.com</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
+</code></pre>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">resource</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
+</code></pre>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">resource</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
 </code></pre>
 
-<h2 id="datetimes-representations">DateTimes representations</h2>
+<h2 id="generation-du-token">Generation du token</h2>
 
-<p>All date/time representations are on ISO 8601 format:
+<p>Le processus de generation du token est delege A <code class="prettyprint">SecureRandom.uuid</code>. Cette methode fait partie de la bibliotheque standard et retourne un UUID(Universally Unique Identifier) qui est garanti d&#39;etre unique sur un namespace globa
+process is delegated to SecureRandom.uuid. This method is part of Ruby’s standard library, and returns a Universally Unique Identifier (RFC 4122) that’s guaranteed to be unique across a global namespace. Egalement nous enleve les &rsquo;-&rsquo; pour rendre le token plus &#39;user-friendly&rsquo;.</p>
+
+<p>De plus, nous faisons en sorte que l unicite du token se fasse au niveau DE LA BASE DE DONNEE en ajoutant un index unique au champ correspondant au token.</p>
+
+<h2 id="representations-des-dates-time">Representations des dates time</h2>
+
+<p>Toutes les representations date/time sont au format ISO 8601.
 <code class="prettyprint">
 YYYY-MM-DDTHH:MM:SSZ
 </code>
-The returned timezone is UTC.</p>
+Le timezone retourné est en UTC.</p>
 
-<h2 id="client-errors">Client Errors</h2>
+<h2 id="erreurs-clients.">Erreurs clients.</h2>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">400</span> <span class="ne">Bad Request</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">35</span>
 <span class="s">{</span>
@@ -105,22 +139,22 @@ The returned timezone is UTC.</p>
 <span class="s">  ]</span>
 <span class="s">}</span>
 </code></pre>
-<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unprocessable Entity</span>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">149</span>
 <span class="s">{</span>
 <span class="s">  "message": "Authentication Failed",</span>
 <span class="s">}</span>
 </code></pre>
-<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">403</span> <span class="ne">Unprocessable Entity</span>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">403</span> <span class="ne">Forbidden</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">149</span>
 <span class="s">{</span>
 <span class="s">  "message": "Not authorized action for that resource",</span>
 <span class="s">}</span>
 </code></pre>
-<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">500</span> <span class="ne">Unprocessable Entity</span>
+<pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">500</span> <span class="ne">Internal server error</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">149</span>
 <span class="s">{</span>
-<span class="s">  "message": "Something went terribly wrong here. Open a github issue :)",</span>
+<span class="s">  "message": "Something went terribly wrong here.",</span>
 <span class="s">}</span>
 </code></pre>
 
@@ -171,10 +205,10 @@ The returned timezone is UTC.</p>
 </tbody></table>
 
 <h2 id="authentication">Authentication</h2>
-<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">/api/v1/sessions</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">v1/sessions</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
-<span class="na">Host</span><span class="p">:</span> <span class="s">rails-tutorial-api.heroku.com</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
 <span class="s">{</span>
 <span class="s">  "user": {</span>
 <span class="s">    "email": "example@railstutorial.org",</span>
@@ -183,52 +217,49 @@ The returned timezone is UTC.</p>
 <span class="s">}</span>
 </code></pre>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
-<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 <span class="s">{</span>
-<span class="s">  "token": "TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA==",</span>
-<span class="s">  "user_email": "example@railstutorial.org",</span>
-<span class="s">  "user_id": 1</span>
+<span class="s">  "auth_token": "TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA",</span>
+<span class="s">  "email": "example@railstutorial.org",</span>
+<span class="s">  "id": 1</span>
 <span class="s">}</span>
 </code></pre>
 
-<p>In order to be able to act on behalf of a user, you must first retrieve her token
-via the sessions endpoint.</p>
+<p>Pour pouvoir faire des requetes authentifiées, il faut d&#39;abord recuperer le token, via le point de terminaison des sessions.</p>
 
-<h2 id="authorization">Authorization</h2>
-<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">/api/v1/resource</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<h2 id="autorisation">Autorisation</h2>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/resource</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
-<span class="na">Host</span><span class="p">:</span> <span class="s">rails-tutorial-api.heroku.com</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
 <span class="na">Authorization</span><span class="p">:</span> <span class="s">Token token="TnQfBY1S/aMdO46sUfXx8mkPa4yxawqgaqVlD2YNzj19QlGI02eFIpoj9YaBtXm3efQZt5oXIQ6DpBw9gvuVGA==", user_email="example@railstutorial.org"</span>
 </code></pre>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
-<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 <span class="s">{</span>
 <span class="s">  "user":{</span>
 <span class="s">    "id":1,</span>
 <span class="s">    "email":"example@railstutorial.org",</span>
-<span class="s">    "name":"Example Use",</span>
-<span class="s">    "activated":true,</span>
+<span class="s">    "nickname":"Example Use",</span>
 <span class="s">    "created_at":"2015-01-13T20:35:24Z",</span>
 <span class="s">    "updated_at":"2015-02-09T19:47:36Z"</span>
 <span class="s">  }</span>
 <span class="s">}</span>
 </code></pre>
 
-<p>You can authenticate in the API by providing the user&rsquo;s token and email in the <code class="prettyprint">Authorization</code> header.</p>
+<p>Vous pouvez vous authentifier à l&#39;API en fournissant le token et l&#39;email du user.</p>
 
 <h2 id="pagination">Pagination</h2>
-<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">/api/v1/resource?page=2&amp;per_page=100</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/resource?page=2&amp;per_page=100</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.travis-ci.2+json</span>
-<span class="na">Host</span><span class="p">:</span> <span class="s">rails-tutorial-api.heroku.com</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">api.mewpipe.com</span>
 </code></pre>
 
-<p>Requests that return multiple items will be paginated to 30 items by default.
-You can specify further pages with the <code class="prettyprint">?page</code> parameter.
-For some resources, you can also set a custom page size up to 100 with the <code class="prettyprint">?per_page</code> parameter.</p>
+<p>Par defaut, les requetes qui retournent beaucoup de ressources vont etre paginés à 30.
+Vous pouvez specifier d&#39;autres pages en specifiant le <code class="prettyprint">?page</code> parametre. Vous pouvez egalement etablir une taille customisé alant juqu&#39;a 100 avec le <code class="prettyprint">?per_page</code> parametre.</p>
 
-<h2 id="rate-limiting">Rate Limiting</h2>
+<h2 id="quota-de-requetes.">Quota de requetes.</h2>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
 <span class="na">Date</span><span class="p">:</span> <span class="s">Mon, 01 Jul 2013 17:27:06 GMT</span>
 <span class="na">Status</span><span class="p">:</span> <span class="s">200 OK</span>
@@ -236,24 +267,19 @@ For some resources, you can also set a custom page size up to 100 with the <code
 <span class="na">X-Ratelimit-Remaining</span><span class="p">:</span> <span class="s">99994</span>
 </code></pre>
 
-<p>You can check the returned HTTP headers of any API request to see your current rate limit status.</p>
+<p>Vous pouvez verifier les headers HTTP de chaque requete d&#39;API pour voir l etat actuel des requetes restantes a faire.
+Il devrait etre note que la limite du quota est variable, dependant de la charge du serveur, veuillez donc respecter les limites.</p>
 
-<p>It should be noted that the rate limit is variable, depending on the server load. Please stay on the limits.</p>
+<p>Si les limites ont été enfreintes, vous allez recevoir une erreur 429 comme decrit dans la section des erreurs client.</p>
 
-<p>If you have abused the limits, you will receive a 429 error as described in the <a href="#client-errors">Client Errors</a></p>
+<h2 id="cross-origin-resource-sharing-(cors)">Cross Origin Resource Sharing (CORS)</h2>
 
-<aside class="notice">
-Although there are no hard limits, you should follow the limits defined on the API response
-</aside>
-
-<h2 id="cross-origin-resource-sharing">Cross Origin Resource Sharing</h2>
-
-<p>The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin.</p>
+<p>Cette API comprend Cross Origin Resource Sharing (CORS) pour les requetes AJAX requests venant de n&#39;importe quelle origine.</p>
 
 <h2 id="meta-data">Meta Data</h2>
-<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">/api/v1/resources</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/resources</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 </code></pre>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
@@ -278,22 +304,22 @@ Although there are no hard limits, you should follow the limits defined on the A
 <span class="s">}</span>
 </code></pre>
 
-<p>In each GET request that acts upon resources, there is an extra field in the response under &ldquo;meta&rdquo; root element.
-It includes, the current requested page, next page, previous page, total pages and the total number of resources under the given params.</p>
+<p>Dans chaque requete GET sur les ressources <code class="prettyprint">/videos</code> par exemple, il y a un champ en plus avec la racine &ldquo;meta&rdquo;.
+Ce dernier inclut nottament, la page actuelle demandee, l&#39;indice de la page suivante, la page precedente, le nombre total de page et le nombre total de la ressource en question.</p>
 
-<h2 id="other-information">Other information</h2>
+<h2 id="autres-informations">Autres informations</h2>
 
-<p>When requesting a list of resources, default sorting is descending by creation datetime.</p>
+<p>Quand une liste de ressource est demandée, l&#39;ordre par defaut est par la date de creation en decroissant.
+When requesting a list of resources, default sorting is descending by creation datetime.</p>
 
-<p>For all collection endpoints, active_hash_relation has been used which means you have plenty
-options to filter </p>
+<p>Pour chaque collection (de videos et de users notamment), une couche d&#39;orchestration a ete utilisee, ce qui donne de multitude de fonctionnalite en plus. telle que le filtrage, la recherche par tags, les collection avant une date precise etc..</p>
 
           <h1 id="users">Users</h1>
 
 <h2 id="list-users">List Users</h2>
-<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">/api/v1/users</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/users</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 </code></pre>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
@@ -326,15 +352,14 @@ options to filter </p>
 }
 </code></pre>
 
-<p>You can GET all users in /api/v1/users.
-You can filter by any attribute.
-More on the index micro-API <a href="https://github.com/kollegorna/active_hash_relation">here</a>.
-It doesn&rsquo;t require authentication.</p>
+<p>You can GET all users in v1/users.
+Vous pouvez filtrer par n&#39;importe quel attribut.
+Pour plus d&#39;infos sur la micro API qui gere cela: cliquez: <a href="https://github.com/kollegorna/active_hash_relation">ic</a>.</p>
 
-<h2 id="create-a-user">Create a User</h2>
-<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">/api/v1/users</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<h2 id="creer-un-utilisateur">Creer un Utilisateur</h2>
+<pre><code class="highlight http"><span class="nf">POST</span> <span class="nn">v1/users</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 
 {
   "user": {
@@ -357,14 +382,14 @@ It doesn&rsquo;t require authentication.</p>
 },
 </code></pre>
 
-<p>You can create a new user sending a POST to <code class="prettyprint">/api/v1/users</code> with the necessary attributes.
+<p>You can create a new user sending a POST to <code class="prettyprint">v1/users</code> with the necessary attributes.
 A user object should at least include, an email, a password
 It doesn&rsquo;t require authentication.</p>
 
 <h2 id="show-a-user">Show a User</h2>
-<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">/api/v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">GET</span> <span class="nn">v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 </code></pre>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
 <span class="na">Content-Length</span><span class="p">:</span> <span class="s">4567</span>
@@ -380,12 +405,12 @@ It doesn&rsquo;t require authentication.</p>
 },
 </code></pre>
 
-<p>You can retrieve a user&rsquo;s info by sending a GET request to <code class="prettyprint">/api/v1/users/{id}</code>.</p>
+<p>You can retrieve a user&rsquo;s info by sending a GET request to <code class="prettyprint">v1/users/{id}</code>.</p>
 
 <h2 id="update-a-user">Update a User</h2>
-<pre><code class="highlight http"><span class="nf">PUT</span> <span class="nn">/api/v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">PUT</span> <span class="nn">v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 <span class="s">{</span>
 <span class="s">  "user": {</span>
 <span class="s">    "nickname":"An updated name",</span>
@@ -406,12 +431,12 @@ It doesn&rsquo;t require authentication.</p>
 },
 </code></pre>
 
-<p>You can update a user&rsquo;s attributes by sending a PUT request to <code class="prettyprint">/api/v1/users/{id}</code> with the necessary attributes.</p>
+<p>You can update a user&rsquo;s attributes by sending a PUT request to <code class="prettyprint">v1/users/{id}</code> with the necessary attributes.</p>
 
 <h2 id="destroy-a-user">Destroy a User</h2>
-<pre><code class="highlight http"><span class="nf">DELETE</span> <span class="nn">/api/v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre><code class="highlight http"><span class="nf">DELETE</span> <span class="nn">v1/users/1</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">User-Agent</span><span class="p">:</span> <span class="s">MyClient/1.0.0</span>
-<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/vnd.mewpipe.com; version=1</span>
 </code></pre>
 <pre><code class="highlight http"><span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">NO CONTENT</span>
 
