@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+ruby "2.2.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
@@ -78,4 +79,9 @@ group :development, :test do
   gem 'faker'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'database_cleaner', '~> 1.3.0'
+end
+
+group :production do
+  gem "rails_12factor"
+
 end
